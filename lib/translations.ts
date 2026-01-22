@@ -39,6 +39,11 @@ export const translations = {
     readMore: "Read More",
     readArticle: "Read Article",
 
+    // Author Info
+    authorTitle: "This article was written by Dom Pierre Roy, Catholic Bishop.",
+    authorBio: "Dom Pierre Roy was ordained a bishop in 2023 by Dom Rodrigo da Silva. His ministry is based in Eastern Canada.",
+    authorMission: "The Our Lady of Joy Mission is headquartered in Stilesville, New Brunswick, and provides the Traditional Latin Mass and the Sacraments across six provinces: New Brunswick, Prince Edward Island, Nova Scotia, Newfoundland and Labrador, Quebec, and Ontario.",
+
     // Footer
     footerAbout: "About",
     footerMission: "Our Mission",
@@ -106,6 +111,11 @@ export const translations = {
     seeMore: "Ver Mais",
     readMore: "Leia Mais",
     readArticle: "Leia Artigo",
+
+    // Author Info
+    authorTitle: "Este artigo foi escrito por Dom Pierre Roy, Bispo Católico.",
+    authorBio: "Dom Pierre Roy foi ordenado bispo em 2023 por Dom Rodrigo da Silva. Seu ministério está baseado no leste do Canadá.",
+    authorMission: "A Missão Nossa Senhora da Alegria está sediada em Stilesville, New Brunswick, e fornece a Missa Latina Tradicional e os Sacramentos em seis províncias: New Brunswick, Ilha do Príncipe Eduardo, Nova Escócia, Terra Nova e Labrador, Quebec e Ontário.",
 
     // Footer
     footerAbout: "Sobre",
@@ -175,6 +185,11 @@ export const translations = {
     readMore: "Lire Plus",
     readArticle: "Lire l'Article",
 
+    // Author Info
+    authorTitle: "Cet article a été écrit par Mgr Pierre Roy, Évêque Catholique.",
+    authorBio: "Mgr Pierre Roy a été ordonné évêque en 2023 par Mgr Rodrigo da Silva. Son ministère est basé dans l'est du Canada.",
+    authorMission: "La Mission Notre-Dame de la Joie a son siège à Stilesville, Nouveau-Brunswick, et fournit la Messe Latine Traditionnelle et les Sacrements dans six provinces : Nouveau-Brunswick, Île-du-Prince-Édouard, Nouvelle-Écosse, Terre-Neuve-et-Labrador, Québec et Ontario.",
+
     // Footer
     footerAbout: "À Propos",
     footerMission: "Notre Mission",
@@ -242,6 +257,11 @@ export const translations = {
     seeMore: "Ver Más",
     readMore: "Leer Más",
     readArticle: "Leer Artículo",
+
+    // Author Info
+    authorTitle: "Este artículo fue escrito por Mons. Pierre Roy, Obispo Católico.",
+    authorBio: "Mons. Pierre Roy fue ordenado obispo en 2023 por Mons. Rodrigo da Silva. Su ministerio está basado en el este de Canadá.",
+    authorMission: "La Misión Nuestra Señora de la Alegría tiene su sede en Stilesville, New Brunswick, y proporciona la Misa Latina Tradicional y los Sacramentos en seis provincias: New Brunswick, Isla del Príncipe Eduardo, Nueva Escocia, Terranova y Labrador, Quebec y Ontario.",
 
     // Footer
     footerAbout: "Acerca de",

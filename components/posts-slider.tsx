@@ -277,29 +277,62 @@ export function PostsSlider() {
       <div className="container mx-auto px-4 mb-8">
         <Card className="hover:shadow-lg transition-shadow bg-card border-border">
           <CardContent className="p-0">
-            <div className="relative aspect-video overflow-hidden rounded-t-lg">
-              <Image
-                src={mainArticle.image || "/placeholder.svg"}
-                alt={mainArticle.title}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-6">
-              <h3 className="text-2xl font-sans font-semibold text-foreground mb-2">{mainArticle.title}</h3>
-              <p className="text-muted-foreground font-serif text-sm leading-relaxed mb-4">{mainArticle.excerpt}</p>
-              <div className="flex items-center justify-between text-xs text-muted-foreground font-serif">
-                <span>{mainArticle.author}</span>
-                <span>{mainArticle.date}</span>
+            <div className="grid md:grid-cols-2 gap-0">
+              {/* Left: Image */}
+              <div className="relative aspect-video md:aspect-square overflow-hidden md:rounded-l-lg rounded-t-lg md:rounded-tr-none">
+                <Image
+                  src={mainArticle.image || "/placeholder.svg"}
+                  alt={mainArticle.title}
+                  fill
+                  className="object-cover"
+                />
               </div>
-              <a
-                href="/articles/where-peter-is"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-4 inline-block text-primary hover:text-primary/80 font-serif text-sm font-semibold"
-              >
-                {t.readArticle} →
-              </a>
+
+              {/* Right: Content */}
+              <div className="p-6 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-sans font-semibold text-foreground mb-3">
+                    {mainArticle.title}
+                  </h3>
+                  <p className="text-muted-foreground font-serif text-base leading-relaxed mb-6">
+                    {mainArticle.excerpt}
+                  </p>
+                  <a
+                    href="/articles/where-peter-is"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block text-primary hover:text-primary/80 font-serif text-sm font-semibold mb-6"
+                  >
+                    {t.readArticle}...
+                  </a>
+                </div>
+
+                {/* Author Info */}
+                <div className="border-t border-border pt-4 mt-4">
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0">
+                      <Image
+                        src="/images/bishop.png"
+                        alt="Bishop Roy"
+                        width={80}
+                        height={80}
+                        className="rounded-lg shadow-md"
+                      />
+                    </div>
+                    <div className="flex-grow">
+                      <p className="text-sm font-serif font-semibold text-foreground mb-2">
+                        {t.authorTitle}
+                      </p>
+                      <p className="text-xs font-serif text-muted-foreground leading-relaxed mb-2">
+                        {t.authorBio}
+                      </p>
+                      <p className="text-xs font-serif text-muted-foreground leading-relaxed">
+                        {t.authorMission}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
