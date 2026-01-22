@@ -22,7 +22,7 @@ export function LanguageToggle() {
   }
 
   return (
-    <div className="fixed right-8 bottom-20 z-50 flex lg:flex flex-col gap-2">
+    <div className="fixed right-8 bottom-20 z-50 hidden lg:flex flex-col gap-2">
       {/* Current selected language - always visible */}
       <button
         onClick={() => setIsOpen(!isOpen)}

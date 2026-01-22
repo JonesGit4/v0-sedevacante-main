@@ -12,7 +12,7 @@ const posts = {
       id: 1,
       title: "Where Peter Is, There Is the Church",
       excerpt:
-        "Homily of Bishop Roy on the Imperfect General Council. During the Christmas season, I sent you a link to a story I wrote for bishops and priests to encourage them to consider the present situation of the Church. As we enter this new year, I think it is very important that we all reflect on these questions.",
+        "Homily of Bishop Roy on the Imperfect General Council. During the Christmas season, I sent you a link to a story I wrote for bishops and priests to encourage them to consider the present situation of the Church. As we enter this new year, I think it is very important that we all reflect on these questions. So, this story was written in the form of a novella. Therefore, it was perhaps not as clear as it should have been for some of you. That is why I thought that today, on this first day of the year, I would address some of these subjects. You know that we are Catholics. We are Roman Catholics. That is our true name. We believe that the See of Peter is the center of our Catholic faith, the rock upon which the Church of our Lord Jesus Christ was established.",
       image: "/images/saint-peter-pope.jpg",
       author: "Bishop Roy",
       date: "January 1, 2026",
@@ -71,7 +71,7 @@ const posts = {
       id: 1,
       title: "Onde está Pedro, aí está a Igreja",
       excerpt:
-        "Homilia de Dom Roy sobre o concílio geral imperfeito. Durante o tempo de Natal, enviei-vos um link para um relato que escrevi destinado aos bispos e aos padres para encorajá-los a considerar a situação presente da Igreja. Ao entrarmos neste novo ano, penso que é muito importante que todos reflitamos sobre estas questões.",
+        "Homilia de Dom Roy sobre o concílio geral imperfeito. Durante o tempo de Natal, enviei-vos um link para um relato que escrevi destinado aos bispos e aos padres para encorajá-los a considerar a situação presente da Igreja. Ao entrarmos neste novo ano, penso que é muito importante que todos reflitamos sobre estas questões. Portanto, esta história foi escrita sob a forma de uma novela. Por isso, talvez não tenha sido tão clara como deveria ter sido para alguns de vós. É por isso que pensei que hoje, neste primeiro dia do ano, abordaria alguns destes assuntos. Sabem que somos católicos. Somos católicos romanos. Este é o nosso verdadeiro nome. Acreditamos que a Sé de Pedro é o centro da nossa fé católica, a rocha sobre a qual foi estabelecida a Igreja de nosso Senhor Jesus Cristo.",
       image: "/images/saint-peter-pope.jpg",
       author: "Dom Roy",
       date: "1 de janeiro de 2026",
@@ -130,7 +130,7 @@ const posts = {
       id: 1,
       title: "« Là où est Pierre, là est l'Église »",
       excerpt:
-        "Homélie de Mgr Roy sur le concile général imparfait. Durant le temps de Noël, je vous ai envoyé un lien vers un récit que j'ai écrit à l'intention des évêques et des prêtres pour les encourager à considérer la situation présente de l'Église. Alors que nous entrons dans cette nouvelle année, je pense qu'il est très important que nous réfléchissions tous à ces questions.",
+        "Homélie de Mgr Roy sur le concile général imparfait. Durant le temps de Noël, je vous ai envoyé un lien vers un récit que j'ai écrit à l'intention des évêques et des prêtres pour les encourager à considérer la situation présente de l'Église. Alors que nous entrons dans cette nouvelle année, je pense qu'il est très important que nous réfléchissions tous à ces questions. Donc, cette histoire fut écrite sous la forme d'une nouvelle. Elle n'était donc peut-être pas aussi claire qu'elle devrait l'être pour certains d'entre vous. C'est pourquoi j'ai pensé qu'aujourd'hui, en ce premier jour de l'année, j'aborderais certains de ces sujets. Vous savez que nous sommes catholiques. Nous sommes catholiques romains. C'est notre véritable nom. Nous croyons que le Siège de Pierre est le centre de notre foi catholique, le roc sur lequel l'Église de notre Seigneur Jésus-Christ a été établie.",
       image: "/images/saint-peter-pope.jpg",
       author: "Mgr Roy",
       date: "1er janvier 2026",
@@ -190,7 +190,7 @@ const posts = {
       id: 1,
       title: "Donde está Pedro, allí está la Iglesia",
       excerpt:
-        "Homilía de Mons. Roy sobre el concilio general imperfecto. Durante el tiempo de Navidad, les envié un enlace a un relato que escribí para los obispos y los sacerdotes para alentarlos a considerar la situación presente de la Iglesia. Al entrar en este nuevo año, creo que es muy importante que todos reflexionemos sobre estas cuestiones.",
+        "Homilía de Mons. Roy sobre el concilio general imperfecto. Durante el tiempo de Navidad, les envié un enlace a un relato que escribí para los obispos y los sacerdotes para alentarlos a considerar la situación presente de la Iglesia. Al entrar en este nuevo año, creo que es muy importante que todos reflexionemos sobre estas cuestiones. Entonces, esta historia fue escrita en forma de novela. Por lo tanto, quizás no fue tan clara como debería haber sido para algunos de ustedes. Es por eso que pensé que hoy, en este primer día del año, abordaría algunos de estos temas. Saben que somos católicos. Somos católicos romanos. Ese es nuestro verdadero nombre. Creemos que la Sede de Pedro es el centro de nuestra fe católica, la roca sobre la cual fue establecida la Iglesia de nuestro Señor Jesucristo.",
       image: "/images/saint-peter-pope.jpg",
       author: "Mons. Roy",
       date: "1 de enero de 2026",
