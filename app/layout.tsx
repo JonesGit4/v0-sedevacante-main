@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Playfair_Display, Crimson_Text } from "next/font/google"
+import { Playfair_Display, Crimson_Text, Cinzel_Decorative } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { LanguageProvider } from "@/lib/language-context"
@@ -17,6 +17,13 @@ const crimsonText = Crimson_Text({
   subsets: ["latin"],
   weight: ["400", "600"],
   variable: "--font-crimson-text",
+  display: "swap",
+})
+
+const cinzelDecorative = Cinzel_Decorative({
+  subsets: ["latin"],
+  weight: ["400", "700", "900"],
+  variable: "--font-cinzel-decorative",
   display: "swap",
 })
 
@@ -68,7 +75,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`font-serif ${playfairDisplay.variable} ${crimsonText.variable} antialiased pb-20`}>
+      <body className={`font-serif ${playfairDisplay.variable} ${crimsonText.variable} ${cinzelDecorative.variable} antialiased pb-20`}>
         <LanguageProvider>
           <DevModalProvider>
             <Suspense fallback={null}>{children}</Suspense>
