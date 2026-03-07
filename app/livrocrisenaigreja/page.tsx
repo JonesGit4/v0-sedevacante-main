@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, type FormEvent } from "react"
+import { useState, useEffect, useRef, type FormEvent } from "react"
 import {
   BookOpen,
   FileText,
@@ -10,14 +10,19 @@ import {
   Heart,
   CheckCircle,
   Clock,
+  Copy,
+  Loader2,
+  X,
   Download,
   Mail,
   Quote,
-  Loader2,
-  X,
 } from "lucide-react"
 
-/* ───────────────────────── Navbar ───────────────────────── */
+/* --- TYPES --- */
+type PurchaseStep = "form" | "processing" | "pix" | "done"
+type DonationStep = "form" | "processing" | "pix" | "done"
+
+/* --- SECTION: Navigation --- */
 function Navbar() {
   const [open, setOpen] = useState(false)
   const links = [
@@ -30,7 +35,7 @@ function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0C0A09]/90 backdrop-blur-md border-b border-[rgba(201,168,76,0.1)]">
       <div className="container mx-auto flex items-center justify-between h-16 px-4 lg:px-8">
-        <a href="/" className="font-cinzel-decorative text-[#C9A84C] text-lg font-bold tracking-wide">
+        <a href="#" className="font-cinzel-decorative text-[#C9A84C] text-lg font-bold tracking-wide">
           Sedevacante
         </a>
         {/* Desktop */}
@@ -46,7 +51,7 @@ function Navbar() {
           ))}
           <a
             href="#comprar"
-            className="gold-glow-btn px-5 py-2 rounded-lg text-sm font-bold"
+            className="gold-glow px-5 py-2 rounded-lg text-sm font-bold"
           >
             Garanta o Seu
           </a>
@@ -57,13 +62,9 @@ function Navbar() {
           onClick={() => setOpen(!open)}
           aria-label="Menu"
         >
-          {open ? (
-            <X size={24} />
-          ) : (
+          {open ? <X size={24} /> : (
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <line x1="3" y1="12" x2="21" y2="12" />
-              <line x1="3" y1="18" x2="21" y2="18" />
+              <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
             </svg>
           )}
         </button>
@@ -82,7 +83,7 @@ function Navbar() {
           ))}
           <a
             href="#comprar"
-            className="block mt-3 gold-glow-btn px-5 py-3 rounded-lg text-sm font-bold text-center"
+            className="block mt-3 gold-glow px-5 py-3 rounded-lg text-sm font-bold text-center"
             onClick={() => setOpen(false)}
           >
             Garanta o Seu
@@ -93,28 +94,30 @@ function Navbar() {
   )
 }
 
-/* ───────────────────────── Hero ───────────────────────── */
+/* --- SECTION: Hero (with 3D perspective book) --- */
 function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center pt-16 overflow-hidden">
+      {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0C0A09] via-[#0C0A09] to-[#100E0C]" />
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle,rgba(201,168,76,0.04)_0%,transparent_70%)]" />
+      <div className="pointer-events-none absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-[radial-gradient(circle,rgba(201,168,76,0.05)_0%,transparent_70%)]" />
 
-      <div className="container relative mx-auto px-4 lg:px-8 py-12 lg:py-0">
-        <div className="flex flex-col items-center gap-10 lg:gap-14">
-          {/* Book Image */}
-          <div className="flex-shrink-0 relative">
-            <div className="absolute -inset-8 bg-[radial-gradient(circle,rgba(201,168,76,0.08)_0%,transparent_70%)]" />
+      <div className="container relative mx-auto px-4 lg:px-8 py-8 sm:py-12 lg:py-20">
+        <div className="flex flex-col items-center gap-10 lg:flex-row lg:items-center lg:justify-center lg:gap-16">
+          {/* Book Perspective Image */}
+          <div className="relative flex-shrink-0">
+            <div className="pointer-events-none absolute -inset-8 bg-[radial-gradient(circle,rgba(201,168,76,0.08)_0%,transparent_70%)]" />
             <img
-              src="/images/livro/livro-perspec.png"
+              src="/livro-perspec.png"
               alt="A Crise de Autoridade na Igreja - Capa do livro em perspectiva"
-              className="relative w-[280px] sm:w-[340px] lg:w-[420px] drop-shadow-[0_20px_40px_rgba(0,0,0,0.5)]"
+              className="livro-perspec relative w-[240px] sm:w-[300px] lg:w-[380px] drop-shadow-[0_24px_48px_rgba(0,0,0,0.6)]"
             />
           </div>
 
-          {/* Text */}
-          <div className="flex-1 text-center max-w-2xl">
-            <div className="inline-flex items-center gap-2 shimmer-badge px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-6">
+          {/* Text Content */}
+          <div className="w-full max-w-xl text-center lg:max-w-2xl lg:text-left">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 shimmer px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-6">
               <Award size={14} />
               Lançamento Inédito
             </div>
@@ -127,29 +130,34 @@ function HeroSection() {
               Os papas do Vaticano II são legítimos?
             </p>
 
-            <p className="text-[#8A8078] text-base leading-relaxed mb-8 max-w-lg mx-auto">
-              Uma obra fundamental de <span className="text-[#D4C8B8] font-medium">Maxence Hecquard</span> para
-              compreender os debates teológicos mais importantes do nosso tempo. Mais de 400 páginas de análise profunda
-              e argumentação rigorosa.
+            <p className="text-[#8A8078] text-base leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
+              Uma obra fundamental de{" "}
+              <span className="text-[#D4C8B8] font-medium">Maxence Hecquard</span>{" "}
+              para compreender os debates teológicos mais importantes do nosso tempo. Mais de 400 páginas de análise profunda e argumentação rigorosa.
             </p>
 
-            <div className="flex flex-wrap justify-center gap-6 mb-10">
+            {/* Stats row */}
+            <div className="flex flex-wrap justify-center lg:justify-start gap-6 mb-10">
               {[
                 { icon: <BookOpen size={18} />, label: "400+ Páginas" },
                 { icon: <FileText size={18} />, label: "12 Capítulos" },
                 { icon: <Globe size={18} />, label: "Edição Brasileira" },
               ].map((stat) => (
-                <div key={stat.label} className="flex items-center gap-2 text-sm text-[#C9A84C]">
+                <div
+                  key={stat.label}
+                  className="flex items-center gap-2 text-sm text-[#C9A84C]"
+                >
                   {stat.icon}
                   <span className="font-medium">{stat.label}</span>
                 </div>
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            {/* CTA */}
+            <div className="flex flex-col items-center gap-4 sm:flex-row lg:items-center lg:justify-start">
               <a
                 href="#comprar"
-                className="gold-glow-btn px-8 py-4 rounded-xl text-base font-bold inline-flex items-center gap-2 w-full sm:w-auto justify-center"
+                className="gold-glow w-full rounded-xl px-8 py-4 text-base font-bold inline-flex items-center justify-center gap-2 sm:w-auto"
               >
                 Garanta seu Exemplar
                 <ChevronRight size={18} />
@@ -167,7 +175,7 @@ function HeroSection() {
   )
 }
 
-/* ───────────────────────── Sobre os Papas ───────────────────────── */
+/* --- SECTION: Sobre os Papas --- */
 function AboutPapasSection() {
   return (
     <section id="sobre" className="livro-section-glow py-8 sm:py-10 lg:py-16">
@@ -186,21 +194,18 @@ function AboutPapasSection() {
           <div className="grid md:grid-cols-2 gap-6 lg:gap-12">
             <div className="space-y-4">
               <p className="text-[#B8AEA2] leading-[1.8] text-base">
-                Esta obra magistral examina uma das questões mais controversas e importantes da história recente da
-                Igreja Católica. Com rigor acadêmico e profundidade teológica, o autor analisa as implicações do
-                Concílio Vaticano II e seus desdobramentos na estrutura hierárquica da Igreja.
+                Esta obra examina uma das questões mais controversas e importantes da história recente da Igreja Católica: as implicações do Concílio Vaticano II e seus desdobramentos na estrutura hierárquica da Igreja.
               </p>
               <p className="text-[#B8AEA2] leading-[1.8] text-base">
-                Através de uma análise meticulosa de documentos históricos, pronunciamentos papais e tratados
-                teológicos, a obra oferece uma perspectiva única sobre a crise de autoridade que muitos católicos
-                percebem na Igreja contemporânea.
+                Com rigor acadêmico e profundidade teológica, o autor analisa documentos históricos, pronunciamentos papais e tratados teológicos para oferecer uma investigação abrangente das transformações ocorridas na Igreja nas últimas décadas.
               </p>
             </div>
-            <div>
+            <div className="space-y-4">
               <p className="text-[#B8AEA2] leading-[1.8] text-base">
-                Essencial para estudiosos, seminaristas, sacerdotes e leigos que desejam compreender as raízes dos
-                debates atuais sobre tradição, autoridade e legitimidade no contexto eclesial. Uma leitura
-                indispensável para todo católico que busca a verdade.
+                Por meio de uma análise meticulosa dessas fontes, a obra apresenta uma perspectiva singular sobre a crise de autoridade que muitos católicos percebem na Igreja contemporânea.
+              </p>
+              <p className="text-[#B8AEA2] leading-[1.8] text-base">
+                Essencial para estudiosos, seminaristas, sacerdotes e leigos que desejam compreender as raízes dos debates atuais sobre tradição, autoridade e legitimidade no contexto eclesial. Uma leitura indispensável para todo católico que deseja compreender a crise atual da Igreja e buscar a verdade.
               </p>
             </div>
           </div>
@@ -209,18 +214,14 @@ function AboutPapasSection() {
             <div className="flex items-center gap-3">
               <div className="w-[3px] h-10 bg-[#C9A84C] rounded-full" />
               <div>
-                <span className="font-cinzel-decorative text-[#C9A84C] text-3xl sm:text-4xl font-bold tracking-wide">
-                  400+
-                </span>
+                <span className="font-cinzel-decorative text-[#C9A84C] text-3xl sm:text-4xl font-bold tracking-wide">400+</span>
                 <p className="text-[10px] sm:text-xs text-[#8A8078] tracking-[0.2em] uppercase mt-0.5">Páginas</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
               <div className="w-[3px] h-10 bg-[#C9A84C] rounded-full" />
               <div>
-                <span className="font-cinzel-decorative text-[#C9A84C] text-3xl sm:text-4xl font-bold tracking-wide">
-                  12
-                </span>
+                <span className="font-cinzel-decorative text-[#C9A84C] text-3xl sm:text-4xl font-bold tracking-wide">12</span>
                 <p className="text-[10px] sm:text-xs text-[#8A8078] tracking-[0.2em] uppercase mt-0.5">Capítulos</p>
               </div>
             </div>
@@ -231,7 +232,7 @@ function AboutPapasSection() {
   )
 }
 
-/* ───────────────────────── Amostra Grátis ───────────────────────── */
+/* --- SECTION: Amostra Grátis --- */
 function FreeSampleSection() {
   const [email, setEmail] = useState("")
   const [name, setName] = useState("")
@@ -243,12 +244,14 @@ function FreeSampleSection() {
     e.preventDefault()
     setError("")
     setLoading(true)
+
     try {
       const res = await fetch("https://webn8n.duobro.com.br/webhook/book-maxence", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email }),
       })
+
       if (!res.ok) throw new Error("Webhook error")
       setSubmitted(true)
     } catch {
@@ -266,7 +269,7 @@ function FreeSampleSection() {
             {/* Book Image Left */}
             <div className="flex-shrink-0 hidden md:block">
               <img
-                src="/images/livro/livro-perspec2.png"
+                src="/livro-perspec2.png"
                 alt="A Crise de Autoridade na Igreja — Livro"
                 className="w-[280px] lg:w-[340px] drop-shadow-[0_16px_32px_rgba(0,0,0,0.5)]"
               />
@@ -283,8 +286,7 @@ function FreeSampleSection() {
                   Amostra Grátis
                 </h2>
                 <p className="text-[#B8AEA2] text-base mb-8 max-w-md mx-auto leading-relaxed">
-                  Receba gratuitamente o sumário e os primeiros capítulos do livro direto no seu e-mail. Conheça a obra
-                  antes de adquirir.
+                  Receba gratuitamente o sumário e os primeiros capítulos do livro direto no seu e-mail. Conheça a obra antes de adquirir.
                 </p>
 
                 {!submitted ? (
@@ -317,7 +319,7 @@ function FreeSampleSection() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="gold-glow-btn w-full py-4 rounded-xl text-base font-bold flex items-center justify-center gap-2"
+                      className="gold-glow w-full py-4 rounded-xl text-base font-bold flex items-center justify-center gap-2"
                     >
                       {loading ? (
                         <>
@@ -331,7 +333,9 @@ function FreeSampleSection() {
                         </>
                       )}
                     </button>
-                    <p className="text-xs text-[#6A6058]">Sem spam. Seus dados estão seguros.</p>
+                    <p className="text-xs text-[#6A6058]">
+                      Sem spam. Seus dados estão seguros.
+                    </p>
                   </form>
                 ) : (
                   <div className="max-w-md mx-auto text-center py-4">
@@ -342,8 +346,7 @@ function FreeSampleSection() {
                       Enviado com sucesso!
                     </h3>
                     <p className="text-[#B8AEA2] text-base">
-                      Verifique sua caixa de entrada em <span className="text-[#C9A84C] font-medium">{email}</span>. A
-                      amostra será enviada em instantes.
+                      Verifique sua caixa de entrada em <span className="text-[#C9A84C] font-medium">{email}</span>. A amostra será enviada em instantes.
                     </p>
                   </div>
                 )}
@@ -356,18 +359,18 @@ function FreeSampleSection() {
   )
 }
 
-/* ───────────────────────── Quem é Maxence Hecquard ───────────────────────── */
+/* --- SECTION: Quem é Maxence Hecquard --- */
 function AuthorSection() {
   return (
     <section id="autor" className="livro-section-glow py-8 sm:py-10 lg:py-16">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-10 lg:gap-16">
-            {/* Author Photo */}
+            {/* Author Photo with frame */}
             <div className="flex-shrink-0">
               <div className="livro-author-frame relative">
                 <img
-                  src="/images/livro/author-hecquard.png"
+                  src="/author-hecquard.png"
                   alt="Maxence Hecquard"
                   className="relative w-[280px] sm:w-[320px] md:w-[350px] aspect-[3/4] object-cover"
                 />
@@ -376,38 +379,33 @@ function AuthorSection() {
 
             {/* Author Bio */}
             <div className="flex-1 text-center md:text-left">
-              <p className="text-[#C9A84C] text-sm font-medium tracking-[0.2em] uppercase mb-3">Sobre o Autor</p>
+              <p className="text-[#C9A84C] text-sm font-medium tracking-[0.2em] uppercase mb-3">
+                Sobre o Autor
+              </p>
               <h2 className="font-cinzel-decorative text-[#E8E0D4] text-3xl sm:text-4xl lg:text-5xl font-bold mb-2 leading-tight">
-                Quem é <span className="gold-text">Maxence Hecquard?</span>
+                Quem é{" "}
+                <span className="gold-text">Maxence Hecquard?</span>
               </h2>
 
               <div className="space-y-4 mt-6">
                 <p className="text-[#B8AEA2] leading-relaxed">
-                  Maxence Hecquard é um renomado teólogo e filósofo francês, reconhecido internacionalmente por seus
-                  estudos sobre a crise do mundo moderno e da Igreja Católica. Com formação em filosofia pela Sorbonne e
-                  estudos na ESSEC (École Supérieure de Sciences Économiques et Commerciales) e na Faculdade de Direito
-                  da Universidade Panthéon-Assas (Paris II), tem se dedicado nas últimas décadas ao estudo da autoridade
-                  eclesiástica, da tradição católica e das raízes intelectuais da modernidade.
+                  Maxence Hecquard é um renomado teólogo e filósofo francês, reconhecido internacionalmente por seus estudos sobre a crise do mundo moderno e da Igreja Católica. Com formação em filosofia pela Sorbonne e estudos na ESSEC (École Supérieure de Sciences Économiques et Commerciales) e na Faculdade de Direito da Universidade Panthéon-Assas (Paris II), tem se dedicado nas últimas décadas ao estudo da autoridade eclesiástica, da tradição católica e das raízes intelectuais da modernidade.
                 </p>
                 <p className="text-[#B8AEA2] leading-relaxed">
-                  É autor de <em>Les Fondements philosophiques de la démocratie moderne</em> (Os Fundamentos Filosóficos
-                  da Democracia Moderna), obra na qual examina as bases metafísicas e teológicas da ideologia
-                  democrática moderna, remontando suas origens à rejeição da autoridade divina e papal no pensamento
-                  iluminista.
+                  É autor de <em className="text-[#D4C8B8]">Les Fondements philosophiques de la démocratie moderne</em> (Os Fundamentos Filosóficos da Democracia Moderna), obra na qual examina as bases metafísicas e teológicas da ideologia democrática moderna, remontando suas origens à rejeição da autoridade divina e papal no pensamento iluminista.
                 </p>
                 <p className="text-[#B8AEA2] leading-relaxed">
-                  Hecquard combina sólida erudição acadêmica com clareza expositiva, tornando temas complexos acessíveis
-                  ao público leigo sem sacrificar a profundidade filosófica e teológica.
+                  Hecquard combina sólida erudição acadêmica com clareza expositiva, tornando temas complexos acessíveis ao público leigo sem sacrificar a profundidade filosófica e teológica.
                 </p>
                 <p className="text-[#B8AEA2] leading-relaxed">
-                  Esta é sua primeira obra traduzida para o português, trazendo ao público lusófono uma análise
-                  fundamental para compreender os debates contemporâneos sobre a Igreja.
+                  Esta é sua primeira obra traduzida para o português, trazendo ao público lusófono uma análise fundamental para compreender os debates contemporâneos sobre a Igreja.
                 </p>
-                <p className="text-[#B8AEA2] leading-relaxed italic">
-                  Les Fondements philosophiques de la démocratie moderne
+                <p className="text-[#D4C8B8] text-sm mt-4 leading-relaxed">
+                  <em>Les Fondements philosophiques de la démocratie moderne</em>
                 </p>
               </div>
 
+              {/* Tags */}
               <div className="flex flex-wrap justify-center md:justify-start gap-3 mt-8">
                 {["Filósofo", "Teólogo", "Escritor"].map((tag) => (
                   <span
@@ -426,10 +424,10 @@ function AuthorSection() {
   )
 }
 
-/* ───────────────────────── Palavra do Bispo ───────────────────────── */
+/* --- SECTION: Palavra do Bispo --- */
 function BishopSection() {
   const [activePhoto, setActivePhoto] = useState(0)
-  const bishopPhotos = ["/images/livro/dom-rodrigo.png", "/images/livro/dom-rodrigo-2.jpeg"]
+  const bishopPhotos = ["/dom-rodrigo.png", "/dom-rodrigo-2.jpeg"]
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -443,35 +441,39 @@ function BishopSection() {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-10 lg:gap-16">
-            {/* Text */}
+            {/* Text content first on desktop (order swap) */}
             <div className="flex-1 text-center md:text-left order-2 md:order-1">
-              <p className="text-[#C9A84C] text-sm font-medium tracking-[0.2em] uppercase mb-3">Prefácio</p>
+              <p className="text-[#C9A84C] text-sm font-medium tracking-[0.2em] uppercase mb-3">
+                Prefácio
+              </p>
               <h2 className="font-cinzel-decorative text-[#E8E0D4] text-3xl sm:text-4xl font-bold mb-6 leading-tight">
-                Palavra do <span className="gold-text">Bispo</span>
+                Palavra do{" "}
+                <span className="gold-text">Bispo</span>
               </h2>
 
               <div className="relative">
                 <Quote size={32} className="text-[#C9A84C] opacity-20 mb-4" />
                 <div className="space-y-4 pl-2 border-l-2 border-[rgba(201,168,76,0.2)]">
                   <p className="font-serif text-[#D4C8B8] text-lg italic leading-relaxed">
-                    Esta obra representa um marco para o público católico brasileiro. Com profundidade e clareza,
-                    Maxence Hecquard nos conduz através das questões fundamentais sobre a autoridade na Igreja,
-                    oferecendo luz em tempos de grande confusão.
+                    Esta obra representa um marco para o público católico brasileiro. Com profundidade e clareza, Maxence Hecquard nos conduz através das questões fundamentais sobre a autoridade na Igreja, oferecendo luz em tempos de grande confusão.
                   </p>
                   <p className="font-serif text-[#D4C8B8] text-lg italic leading-relaxed">
-                    Recomendo vivamente esta leitura a todos os fiéis que buscam compreender os acontecimentos que
-                    marcaram a Igreja no último século.
+                    Recomendo vivamente esta leitura a todos os fiéis que buscam compreender os acontecimentos que marcaram a Igreja no último século.
                   </p>
                 </div>
               </div>
 
               <div className="mt-8">
-                <p className="text-[#E8E0D4] font-cinzel-decorative font-bold text-lg">Dom Rodrigo</p>
-                <p className="text-[#8A8078] text-sm mt-0.5">Bispo</p>
+                <p className="text-[#E8E0D4] font-cinzel-decorative font-bold text-lg">
+                  Dom Rodrigo
+                </p>
+                <p className="text-[#8A8078] text-sm mt-0.5">
+                  Bispo
+                </p>
               </div>
             </div>
 
-            {/* Bishop Photos */}
+            {/* Bishop Photo Carousel */}
             <div className="flex-shrink-0 order-1 md:order-2">
               <div className="relative w-[260px] sm:w-[300px] md:w-[340px] aspect-[3/4]">
                 <div className="absolute -inset-4 rounded-2xl bg-[radial-gradient(circle,rgba(201,168,76,0.08)_0%,transparent_70%)]" />
@@ -494,19 +496,23 @@ function BishopSection() {
   )
 }
 
-/* ───────────────────────── Pricing ───────────────────────── */
+/* --- SECTION: Pricing --- */
 function PricingSection() {
   const tiers = [
     {
       name: "1º Lote",
       badge: "Ativo",
-      badgeClass: "shimmer-badge",
+      badgeClass: "shimmer",
       active: true,
       originalPrice: "R$120,00",
       price: "R$80,00",
       discount: "35% off",
-      note: "+frete",
-      features: ["Preço exclusivo de lançamento", "Vagas limitadas", "Envio assim que disponível"],
+      note: "Frete grátis",
+      features: [
+        "Preço exclusivo de lançamento",
+        "Vagas limitadas",
+        "Envio assim que disponível",
+      ],
     },
     {
       name: "2º Lote",
@@ -517,7 +523,11 @@ function PricingSection() {
       price: "R$96,00",
       discount: "20% off",
       note: "+frete",
-      features: ["Desconto de segundo lote", "Disponível após esgotamento do 1º", "Envio assim que disponível"],
+      features: [
+        "Desconto de segundo lote",
+        "Disponível após esgotamento do 1º",
+        "Envio assim que disponível",
+      ],
     },
     {
       name: "Normal",
@@ -528,7 +538,11 @@ function PricingSection() {
       price: "R$120,00",
       discount: null,
       note: "+frete",
-      features: ["Preço normal sem desconto", "Disponível após os lotes", "Envio imediato"],
+      features: [
+        "Preço normal sem desconto",
+        "Disponível após os lotes",
+        "Envio imediato",
+      ],
     },
   ]
 
@@ -539,7 +553,9 @@ function PricingSection() {
           <h2 className="font-cinzel-decorative gold-text text-3xl sm:text-4xl font-bold mb-4">
             Garanta o Seu Exemplar
           </h2>
-          <p className="text-[#8A8078]">Preço promocional por tempo limitado — aproveite o 1º Lote</p>
+          <p className="text-[#8A8078]">
+            Preço promocional por tempo limitado — aproveite o 1º Lote
+          </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
@@ -552,17 +568,25 @@ function PricingSection() {
                   : "bg-[#161412]/60 border border-[rgba(201,168,76,0.06)] opacity-70"
               }`}
             >
+              {/* Badge */}
               <div className="flex items-center justify-between mb-6">
-                <h3 className="font-cinzel-decorative text-[#E8E0D4] text-lg font-bold">{tier.name}</h3>
-                <span className={`px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase ${tier.badgeClass}`}>
+                <h3 className="font-cinzel-decorative text-[#E8E0D4] text-lg font-bold">
+                  {tier.name}
+                </h3>
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase ${tier.badgeClass}`}
+                >
                   {tier.badge}
                 </span>
               </div>
 
+              {/* Price */}
               <div className="mb-6">
                 {tier.originalPrice && tier.discount && (
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-sm text-[#6A6058] line-through">{tier.originalPrice}</span>
+                    <span className="text-sm text-[#6A6058] line-through">
+                      {tier.originalPrice}
+                    </span>
                     <span className="text-xs bg-[rgba(201,168,76,0.15)] text-[#C9A84C] px-2 py-0.5 rounded-full font-bold">
                       {tier.discount}
                     </span>
@@ -577,25 +601,31 @@ function PricingSection() {
                     {tier.price}
                   </span>
                 </div>
-                <span className="text-xs text-[#6A6058] mt-1 block">{tier.note}</span>
+                <span className={`text-xs mt-1 block ${tier.active && tier.note === "Frete grátis" ? "text-green-400 font-medium" : "text-[#6A6058]"}`}>
+                  {tier.active && tier.note === "Frete grátis" ? `✓ ${tier.note}` : tier.note}
+                </span>
               </div>
 
+              {/* Features */}
               <ul className="space-y-3 mb-6">
                 {tier.features.map((f) => (
                   <li key={f} className="flex items-start gap-2 text-sm text-[#B8AEA2]">
                     <CheckCircle
                       size={16}
-                      className={`flex-shrink-0 mt-0.5 ${tier.active ? "text-[#C9A84C]" : "text-[#6A6058]"}`}
+                      className={`flex-shrink-0 mt-0.5 ${
+                        tier.active ? "text-[#C9A84C]" : "text-[#6A6058]"
+                      }`}
                     />
                     {f}
                   </li>
                 ))}
               </ul>
 
+              {/* CTA */}
               {tier.active ? (
                 <a
                   href="#comprar"
-                  className="gold-glow-btn w-full py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2"
+                  className="gold-glow w-full py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2"
                 >
                   Comprar Agora
                   <ChevronRight size={16} />
@@ -617,37 +647,92 @@ function PricingSection() {
   )
 }
 
-/* ───────────────────────── Purchase (webhook-based) ───────────────────────── */
+/* --- SECTION: Purchase Form --- */
 function PurchaseSection() {
-  const [step, setStep] = useState<"form" | "processing" | "done">("form")
-  const [form, setForm] = useState({ name: "", email: "", phone: "", quantity: 1 })
+  const [step, setStep] = useState<PurchaseStep>("form")
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    quantity: 1,
+    cpf: "",
+    rua: "",
+    numero: "",
+    complemento: "",
+    bairro: "",
+    cidade: "",
+    uf: "",
+    cep: "",
+  })
+  const [pixData, setPixData] = useState<{
+    brCode: string
+    qrCodeImage: string
+    correlationID: string
+  } | null>(null)
   const [error, setError] = useState("")
+  const [copied, setCopied] = useState(false)
+  const formRef = useRef<HTMLFormElement>(null)
 
-  const pricePerUnit = 8000
+  const pricePerUnit = 8000 // R$80,00 in cents
   const priceDisplay = "R$80,00"
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setError("")
     setStep("processing")
+
     try {
+      const correlationID = `order-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+      const totalCents = pricePerUnit * form.quantity
+
       const res = await fetch("https://webn8n.duobro.com.br/webhook/book-maxence", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: "purchase",
+          correlationID,
           name: form.name,
           email: form.email,
           phone: form.phone,
           quantity: form.quantity,
-          totalAmount: (pricePerUnit * form.quantity) / 100,
+          totalAmount: totalCents / 100,
+          tier: "lote1",
+          cpf: form.cpf || undefined,
+          rua: form.rua || undefined,
+          numero: form.numero || undefined,
+          complemento: form.complemento || undefined,
+          bairro: form.bairro || undefined,
+          cidade: form.cidade || undefined,
+          uf: form.uf || undefined,
+          cep: form.cep || undefined,
         }),
       })
-      if (!res.ok) throw new Error("Erro")
-      setStep("done")
+
+      if (!res.ok) throw new Error("Webhook error")
+
+      const data = await res.json().catch(() => ({}))
+
+      if (data?.brCode && data?.qrCodeImage) {
+        setPixData({
+          brCode: data.brCode,
+          qrCodeImage: data.qrCodeImage,
+          correlationID: data.correlationID || correlationID,
+        })
+        setStep("pix")
+      } else {
+        setStep("done")
+      }
     } catch {
-      setError("Erro ao processar. Tente novamente ou entre em contato.")
+      setError("Erro ao gerar cobrança PIX. Tente novamente ou entre em contato.")
       setStep("form")
+    }
+  }
+
+  function handleCopy() {
+    if (pixData?.brCode) {
+      navigator.clipboard.writeText(pixData.brCode)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
     }
   }
 
@@ -661,20 +746,23 @@ function PurchaseSection() {
             </h2>
             <p className="text-[#8A8078]">
               1º Lote — <span className="text-[#C9A84C] font-semibold">{priceDisplay}</span> por exemplar{" "}
-              <span className="text-[#6A6058]">(+frete)</span>
+              <span className="text-green-400 text-xs font-medium">✓ Frete grátis · 1º Lote</span>
             </p>
           </div>
 
           <div className="rounded-2xl bg-[#161412]/80 border border-[rgba(201,168,76,0.12)] p-6 sm:p-8">
             {step === "form" && (
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
                 {error && (
                   <div className="p-3 rounded-lg bg-red-900/20 border border-red-800/30 text-red-300 text-sm">
                     {error}
                   </div>
                 )}
+
                 <div>
-                  <label className="block text-sm font-medium text-[#D4C8B8] mb-1.5">Nome completo</label>
+                  <label className="block text-sm font-medium text-[#D4C8B8] mb-1.5">
+                    Nome completo
+                  </label>
                   <input
                     type="text"
                     required
@@ -684,9 +772,12 @@ function PurchaseSection() {
                     placeholder="Seu nome completo"
                   />
                 </div>
+
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-sm font-medium text-[#D4C8B8] mb-1.5">E-mail</label>
+                    <label className="block text-sm font-medium text-[#D4C8B8] mb-1.5">
+                      E-mail
+                    </label>
                     <input
                       type="email"
                       required
@@ -697,7 +788,9 @@ function PurchaseSection() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-[#D4C8B8] mb-1.5">Telefone / WhatsApp</label>
+                    <label className="block text-sm font-medium text-[#D4C8B8] mb-1.5">
+                      Telefone / WhatsApp
+                    </label>
                     <input
                       type="tel"
                       required
@@ -708,8 +801,125 @@ function PurchaseSection() {
                     />
                   </div>
                 </div>
+
+                {/* CPF */}
                 <div>
-                  <label className="block text-sm font-medium text-[#D4C8B8] mb-1.5">Quantidade</label>
+                  <label className="block text-sm font-medium text-[#D4C8B8] mb-1.5">
+                    CPF
+                  </label>
+                  <input
+                    type="text"
+                    value={form.cpf}
+                    onChange={(e) => setForm({ ...form, cpf: e.target.value })}
+                    className="livro-dark-input w-full px-4 py-3 rounded-xl text-sm"
+                    placeholder="000.000.000-00"
+                  />
+                </div>
+
+                {/* Endereço de Entrega */}
+                <div>
+                  <p className="text-sm font-semibold text-[#C9A84C] mb-3 uppercase tracking-wide">
+                    Endereço de Entrega
+                  </p>
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="col-span-2">
+                        <label className="block text-xs font-medium text-[#D4C8B8] mb-1">
+                          Rua / Logradouro
+                        </label>
+                        <input
+                          type="text"
+                          value={form.rua}
+                          onChange={(e) => setForm({ ...form, rua: e.target.value })}
+                          className="livro-dark-input w-full px-3 py-2.5 rounded-xl text-sm"
+                          placeholder="Nome da rua"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-[#D4C8B8] mb-1">
+                          Número
+                        </label>
+                        <input
+                          type="text"
+                          value={form.numero}
+                          onChange={(e) => setForm({ ...form, numero: e.target.value })}
+                          className="livro-dark-input w-full px-3 py-2.5 rounded-xl text-sm"
+                          placeholder="Nº"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-[#D4C8B8] mb-1">
+                        Complemento <span className="text-[#6A6058]">(opcional)</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={form.complemento}
+                        onChange={(e) => setForm({ ...form, complemento: e.target.value })}
+                        className="livro-dark-input w-full px-3 py-2.5 rounded-xl text-sm"
+                        placeholder="Apto, bloco, casa..."
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium text-[#D4C8B8] mb-1">
+                          Bairro
+                        </label>
+                        <input
+                          type="text"
+                          value={form.bairro}
+                          onChange={(e) => setForm({ ...form, bairro: e.target.value })}
+                          className="livro-dark-input w-full px-3 py-2.5 rounded-xl text-sm"
+                          placeholder="Bairro"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-[#D4C8B8] mb-1">
+                          Cidade
+                        </label>
+                        <input
+                          type="text"
+                          value={form.cidade}
+                          onChange={(e) => setForm({ ...form, cidade: e.target.value })}
+                          className="livro-dark-input w-full px-3 py-2.5 rounded-xl text-sm"
+                          placeholder="Cidade"
+                        />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium text-[#D4C8B8] mb-1">
+                          UF
+                        </label>
+                        <input
+                          type="text"
+                          maxLength={2}
+                          value={form.uf}
+                          onChange={(e) => setForm({ ...form, uf: e.target.value.toUpperCase() })}
+                          className="livro-dark-input w-full px-3 py-2.5 rounded-xl text-sm"
+                          placeholder="SP"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-[#D4C8B8] mb-1">
+                          CEP
+                        </label>
+                        <input
+                          type="text"
+                          value={form.cep}
+                          onChange={(e) => setForm({ ...form, cep: e.target.value })}
+                          className="livro-dark-input w-full px-3 py-2.5 rounded-xl text-sm"
+                          placeholder="00000-000"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-[#D4C8B8] mb-1.5">
+                    Quantidade
+                  </label>
                   <div className="flex items-center gap-3">
                     <button
                       type="button"
@@ -731,6 +941,7 @@ function PurchaseSection() {
                   </div>
                 </div>
 
+                {/* Total */}
                 <div className="flex items-center justify-between p-4 rounded-xl bg-[rgba(201,168,76,0.05)] border border-[rgba(201,168,76,0.1)]">
                   <span className="text-sm text-[#D4C8B8]">Total</span>
                   <span className="font-cinzel-decorative text-2xl font-bold text-[#C9A84C]">
@@ -740,13 +951,14 @@ function PurchaseSection() {
 
                 <button
                   type="submit"
-                  className="gold-glow-btn w-full py-4 rounded-xl text-base font-bold flex items-center justify-center gap-2"
+                  className="gold-glow w-full py-4 rounded-xl text-base font-bold flex items-center justify-center gap-2"
                 >
-                  Fazer Encomenda
+                  Pagar com PIX
                   <ChevronRight size={18} />
                 </button>
+
                 <p className="text-xs text-center text-[#6A6058]">
-                  Você receberá as instruções de pagamento por e-mail e WhatsApp.
+                  Pagamento seguro via PIX. <span className="text-green-400">✓ Frete grátis no 1º Lote.</span>
                 </p>
               </form>
             )}
@@ -754,28 +966,107 @@ function PurchaseSection() {
             {step === "processing" && (
               <div className="flex flex-col items-center justify-center py-16 gap-4">
                 <Loader2 size={40} className="text-[#C9A84C] animate-spin" />
-                <p className="text-[#D4C8B8] font-medium">Processando...</p>
+                <p className="text-[#D4C8B8] font-medium">
+                  Gerando cobrança PIX...
+                </p>
+              </div>
+            )}
+
+            {step === "pix" && pixData && (
+              <div className="space-y-6">
+                <div className="text-center">
+                  <div className="inline-flex items-center gap-2 bg-[rgba(201,168,76,0.1)] text-[#C9A84C] px-4 py-2 rounded-full text-sm font-medium mb-4">
+                    <Clock size={16} />
+                    Aguardando pagamento
+                  </div>
+                  <h3 className="font-cinzel-decorative text-[#E8E0D4] text-xl font-bold mb-2">
+                    Escaneie o QR Code
+                  </h3>
+                  <p className="text-sm text-[#8A8078]">
+                    Abra o app do seu banco e escaneie o código abaixo
+                  </p>
+                </div>
+
+                {pixData.qrCodeImage && (
+                  <div className="flex justify-center">
+                    <div className="bg-white p-4 rounded-xl">
+                      <img
+                        src={pixData.qrCodeImage}
+                        alt="QR Code PIX"
+                        className="w-48 h-48"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {pixData.brCode && (
+                  <div>
+                    <label className="block text-sm font-medium text-[#D4C8B8] mb-1.5">
+                      Ou copie o código PIX:
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        readOnly
+                        value={pixData.brCode}
+                        className="livro-dark-input flex-1 px-4 py-3 rounded-xl text-xs font-mono"
+                      />
+                      <button
+                        onClick={handleCopy}
+                        className="flex-shrink-0 p-3 rounded-xl bg-[rgba(201,168,76,0.1)] border border-[rgba(201,168,76,0.2)] text-[#C9A84C] hover:bg-[rgba(201,168,76,0.2)] transition-colors"
+                      >
+                        {copied ? <CheckCircle size={18} /> : <Copy size={18} />}
+                      </button>
+                    </div>
+                    {copied && (
+                      <p className="text-xs text-[#C9A84C] mt-1">
+                        Código copiado!
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                <div className="p-4 rounded-xl bg-[rgba(201,168,76,0.05)] border border-[rgba(201,168,76,0.1)]">
+                  <p className="text-sm text-[#B8AEA2]">
+                    <strong className="text-[#D4C8B8]">Total:</strong>{" "}
+                    R${((pricePerUnit * form.quantity) / 100).toFixed(2).replace(".", ",")}
+                  </p>
+                  <p className="text-xs text-[#8A8078] mt-1">
+                    Após o pagamento, você receberá a confirmação por e-mail em{" "}
+                    {form.email}
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setStep("form")
+                    setPixData(null)
+                    setForm({ name: "", email: "", phone: "", quantity: 1, cpf: "", rua: "", numero: "", complemento: "", bairro: "", cidade: "", uf: "", cep: "" })
+                  }}
+                  className="w-full py-3 rounded-xl text-sm text-[#8A8078] border border-[rgba(201,168,76,0.08)] hover:text-[#D4C8B8] hover:border-[rgba(201,168,76,0.2)] transition-colors"
+                >
+                  Fazer nova encomenda
+                </button>
               </div>
             )}
 
             {step === "done" && (
-              <div className="text-center py-8">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[rgba(201,168,76,0.15)] mb-6">
+              <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[rgba(201,168,76,0.15)] mb-2">
                   <CheckCircle size={32} className="text-[#C9A84C]" />
                 </div>
-                <h3 className="font-cinzel-decorative text-[#E8E0D4] text-xl font-bold mb-3">
-                  Encomenda Recebida!
+                <h3 className="font-cinzel-decorative text-[#E8E0D4] text-xl font-bold">
+                  Encomenda recebida!
                 </h3>
-                <p className="text-[#B8AEA2] text-base max-w-md mx-auto mb-6">
-                  Obrigado, <span className="text-[#C9A84C] font-medium">{form.name}</span>! Enviamos as instruções de
-                  pagamento para <span className="text-[#C9A84C] font-medium">{form.email}</span> e para seu WhatsApp.
+                <p className="text-[#B8AEA2] text-sm max-w-sm">
+                  Sua encomenda foi registrada com sucesso. Você receberá as instruções de pagamento no e-mail <span className="text-[#C9A84C]">{form.email}</span>.
                 </p>
                 <button
                   onClick={() => {
                     setStep("form")
-                    setForm({ name: "", email: "", phone: "", quantity: 1 })
+                    setForm({ name: "", email: "", phone: "", quantity: 1, cpf: "", rua: "", numero: "", complemento: "", bairro: "", cidade: "", uf: "", cep: "" })
                   }}
-                  className="px-6 py-3 rounded-xl text-sm text-[#8A8078] border border-[rgba(201,168,76,0.15)] hover:text-[#D4C8B8] hover:border-[rgba(201,168,76,0.3)] transition-colors"
+                  className="mt-2 text-sm text-[#8A8078] hover:text-[#D4C8B8] transition-colors"
                 >
                   Fazer nova encomenda
                 </button>
@@ -788,12 +1079,17 @@ function PurchaseSection() {
   )
 }
 
-/* ───────────────────────── Donation ───────────────────────── */
+/* --- SECTION: Donation --- */
 function DonationSection() {
-  const [showForm, setShowForm] = useState(false)
+  const [step, setStep] = useState<DonationStep>("form")
   const [form, setForm] = useState({ name: "", email: "", amount: "" })
-  const [step, setStep] = useState<"form" | "processing" | "done">("form")
+  const [pixData, setPixData] = useState<{
+    brCode: string
+    qrCodeImage: string
+  } | null>(null)
   const [error, setError] = useState("")
+  const [copied, setCopied] = useState(false)
+  const [showForm, setShowForm] = useState(false)
 
   async function handleDonate(e: FormEvent) {
     e.preventDefault()
@@ -804,19 +1100,32 @@ function DonationSection() {
       return
     }
     setStep("processing")
+
     try {
+      const correlationID = `donation-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+
       const res = await fetch("https://webn8n.duobro.com.br/webhook/book-maxence", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: "donation",
+          correlationID,
           name: form.name,
           email: form.email,
           amount: amountNum,
         }),
       })
+
       if (!res.ok) throw new Error("Erro")
-      setStep("done")
+
+      const data = await res.json().catch(() => ({}))
+
+      if (data?.brCode && data?.qrCodeImage) {
+        setPixData({ brCode: data.brCode, qrCodeImage: data.qrCodeImage })
+        setStep("pix")
+      } else {
+        setStep("done")
+      }
     } catch {
       setError("Erro ao gerar doação. Tente novamente.")
       setStep("form")
@@ -832,8 +1141,7 @@ function DonationSection() {
             Apoie o Seminário São José
           </h2>
           <p className="text-[#8A8078] text-base mb-8 leading-relaxed">
-            Contribua para a formação de sacerdotes fiéis à Tradição. Sua doação ajuda a manter o Seminário São José e
-            sua missão de preservar a fé católica.
+            Contribua para a formação de sacerdotes fiéis à Tradição. Sua doação ajuda a manter o Seminário São José e sua missão de preservar a fé católica.
           </p>
 
           {!showForm && step === "form" && (
@@ -847,10 +1155,7 @@ function DonationSection() {
           )}
 
           {showForm && step === "form" && (
-            <form
-              onSubmit={handleDonate}
-              className="text-left space-y-4 mt-6 rounded-2xl bg-[#161412]/80 border border-[rgba(201,168,76,0.12)] p-6"
-            >
+            <form onSubmit={handleDonate} className="text-left space-y-4 mt-6 rounded-2xl bg-[#161412]/80 border border-[rgba(201,168,76,0.12)] p-6">
               {error && (
                 <div className="p-3 rounded-lg bg-red-900/20 border border-red-800/30 text-red-300 text-sm">
                   {error}
@@ -879,7 +1184,9 @@ function DonationSection() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#D4C8B8] mb-1.5">Valor da Doação (R$)</label>
+                <label className="block text-sm font-medium text-[#D4C8B8] mb-1.5">
+                  Valor da Doação (R$)
+                </label>
                 <input
                   type="text"
                   required
@@ -891,10 +1198,10 @@ function DonationSection() {
               </div>
               <button
                 type="submit"
-                className="gold-glow-btn w-full py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2"
+                className="gold-glow w-full py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2"
               >
                 <Heart size={16} />
-                Doar
+                Doar via PIX
               </button>
             </form>
           )}
@@ -902,24 +1209,82 @@ function DonationSection() {
           {step === "processing" && (
             <div className="flex flex-col items-center justify-center py-12 gap-4 mt-6">
               <Loader2 size={36} className="text-[#C9A84C] animate-spin" />
-              <p className="text-[#D4C8B8] font-medium">Processando doação...</p>
+              <p className="text-[#D4C8B8] font-medium">Gerando doação PIX...</p>
+            </div>
+          )}
+
+          {step === "pix" && pixData && (
+            <div className="mt-6 space-y-6 rounded-2xl bg-[#161412]/80 border border-[rgba(201,168,76,0.12)] p-6">
+              <div className="text-center">
+                <div className="inline-flex items-center gap-2 bg-[rgba(201,168,76,0.1)] text-[#C9A84C] px-4 py-2 rounded-full text-sm font-medium mb-2">
+                  <Clock size={16} />
+                  Aguardando pagamento
+                </div>
+              </div>
+              {pixData.qrCodeImage && (
+                <div className="flex justify-center">
+                  <div className="bg-white p-4 rounded-xl">
+                    <img
+                      src={pixData.qrCodeImage}
+                      alt="QR Code PIX Doação"
+                      className="w-40 h-40"
+                    />
+                  </div>
+                </div>
+              )}
+              {pixData.brCode && (
+                <div className="text-left">
+                  <label className="block text-sm font-medium text-[#D4C8B8] mb-1.5">
+                    Código PIX:
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      readOnly
+                      value={pixData.brCode}
+                      className="livro-dark-input flex-1 px-4 py-3 rounded-xl text-xs font-mono"
+                    />
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(pixData.brCode)
+                        setCopied(true)
+                        setTimeout(() => setCopied(false), 2000)
+                      }}
+                      className="flex-shrink-0 p-3 rounded-xl bg-[rgba(201,168,76,0.1)] border border-[rgba(201,168,76,0.2)] text-[#C9A84C]"
+                    >
+                      {copied ? <CheckCircle size={18} /> : <Copy size={18} />}
+                    </button>
+                  </div>
+                </div>
+              )}
+              <button
+                onClick={() => {
+                  setStep("form")
+                  setPixData(null)
+                  setForm({ name: "", email: "", amount: "" })
+                  setShowForm(false)
+                }}
+                className="w-full py-3 rounded-xl text-sm text-[#8A8078] border border-[rgba(201,168,76,0.08)] hover:text-[#D4C8B8] transition-colors"
+              >
+                Fechar
+              </button>
             </div>
           )}
 
           {step === "done" && (
-            <div className="mt-6 rounded-2xl bg-[#161412]/80 border border-[rgba(201,168,76,0.12)] p-6 text-center">
-              <CheckCircle size={36} className="text-[#C9A84C] mx-auto mb-4" />
-              <h3 className="font-cinzel-decorative text-[#E8E0D4] text-xl font-bold mb-2">Obrigado!</h3>
-              <p className="text-[#B8AEA2]">
-                Sua doação foi recebida. Você receberá as instruções por e-mail.
-              </p>
+            <div className="mt-6 flex flex-col items-center gap-4 py-8">
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[rgba(201,168,76,0.15)]">
+                <CheckCircle size={28} className="text-[#C9A84C]" />
+              </div>
+              <p className="text-[#D4C8B8] font-medium">Doação registrada!</p>
+              <p className="text-[#8A8078] text-sm">Obrigado pelo apoio ao Seminário São José.</p>
               <button
                 onClick={() => {
                   setStep("form")
                   setForm({ name: "", email: "", amount: "" })
                   setShowForm(false)
                 }}
-                className="mt-4 px-6 py-2 rounded-xl text-sm text-[#8A8078] border border-[rgba(201,168,76,0.08)] hover:text-[#D4C8B8] transition-colors"
+                className="text-sm text-[#8A8078] hover:text-[#D4C8B8] transition-colors"
               >
                 Fechar
               </button>
@@ -931,13 +1296,17 @@ function DonationSection() {
   )
 }
 
-/* ───────────────────────── Footer ───────────────────────── */
+/* --- SECTION: Footer --- */
 function LivroFooter() {
   return (
     <footer className="py-10 border-t border-[rgba(201,168,76,0.08)]">
       <div className="container mx-auto px-4 lg:px-8 text-center">
-        <p className="font-cinzel-decorative text-[#C9A84C] text-lg font-bold mb-2">Sedevacante</p>
-        <p className="text-xs text-[#6A6058]">© 2026 Sedevacante. Todos os direitos reservados.</p>
+        <p className="font-cinzel-decorative text-[#C9A84C] text-lg font-bold mb-2">
+          Sedevacante
+        </p>
+        <p className="text-xs text-[#6A6058]">
+          © 2026 Sedevacante. Todos os direitos reservados.
+        </p>
       </div>
     </footer>
   )
