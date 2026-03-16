@@ -24,9 +24,9 @@ const navLinks = [
   { href: "#sobre", label: "Sobre" },
   { href: "#programacao", label: "Programação" },
   { href: "#local", label: "Local" },
+  { href: "#inscricao", label: "Inscrição" },
   { href: "#hospedagem", label: "Hospedagem" },
   { href: "#valores", label: "Valores" },
-  { href: "#inscricao", label: "Inscrição" },
 ]
 
 const slideImages = [
@@ -48,88 +48,56 @@ const schedule: DaySchedule[] = [
   {
     day: "Domingo", date: "29 de Março", liturgicalName: "Domingo de Ramos", color: "#DC2626", noAccommodation: true,
     events: [
-      { time: "08:30", title: "Chegada e recepção", type: "activity" },
-      { time: "09:00", title: "Bênção dos Ramos e Missa Solene", celebrant: "Dom Rodrigo da Silva", type: "mass" },
-      { time: "11:00", title: "Confraternização", type: "activity" },
+      { time: "10:00", title: "Bênção dos Ramos e Santa Missa", celebrant: "Dom Rodrigo da Silva", type: "mass" },
+      { time: "13:00", title: "Almoço", type: "meal" },
     ],
   },
   {
     day: "Segunda-feira", date: "30 de Março", liturgicalName: "Segunda-feira Santa", color: "#8B5CF6", noAccommodation: true,
     events: [
-      { time: "09:00", title: "Santa Missa", celebrant: "Dom Rodrigo da Silva", type: "mass" },
-      { time: "10:30", title: "Confissões", type: "devotion" },
-      { time: "14:00", title: "Palestra espiritual", type: "activity" },
+      { time: "19:00", title: "Santa Missa — rezada", celebrant: "Dom Rodrigo da Silva", type: "mass" },
     ],
   },
   {
     day: "Terça-feira", date: "31 de Março", liturgicalName: "Terça-feira Santa", color: "#8B5CF6", noAccommodation: true,
     events: [
-      { time: "09:00", title: "Santa Missa", celebrant: "Dom Rodrigo da Silva", type: "mass" },
-      { time: "10:30", title: "Confissões", type: "devotion" },
-      { time: "14:00", title: "Palestra espiritual", type: "activity" },
+      { time: "19:00", title: "Santa Missa — rezada", celebrant: "Dom Rodrigo da Silva", type: "mass" },
     ],
   },
   {
     day: "Quarta-feira", date: "1 de Abril", liturgicalName: "Quarta-feira Santa", color: "#8B5CF6",
     events: [
-      { time: "14:00", title: "Chegada e acomodação", type: "activity" },
-      { time: "16:00", title: "Café e recepção", type: "meal" },
-      { time: "17:00", title: "Confissões", type: "devotion" },
-      { time: "18:00", title: "Santa Missa", celebrant: "Dom Rodrigo da Silva", type: "mass" },
-      { time: "19:30", title: "Jantar", type: "meal" },
-      { time: "20:30", title: "Palestra de abertura", type: "activity" },
+      { time: "19:00", title: "Santa Missa — rezada", celebrant: "Dom Rodrigo da Silva", type: "mass" },
+      { time: "20:00", title: "Ofício das Trevas", type: "devotion" },
     ],
   },
   {
     day: "Quinta-feira", date: "2 de Abril", liturgicalName: "Quinta-feira Santa", color: "#EAB308",
     events: [
-      { time: "07:00", title: "Oração da manhã", type: "devotion" },
-      { time: "07:30", title: "Café da manhã", type: "meal" },
-      { time: "09:00", title: "Palestra espiritual", type: "activity" },
-      { time: "10:30", title: "Confissões", type: "devotion" },
-      { time: "12:00", title: "Almoço", type: "meal" },
-      { time: "14:00", title: "Tempo livre / Meditação", type: "activity" },
-      { time: "17:00", title: "Missa da Ceia do Senhor — Lava-pés", celebrant: "Dom Rodrigo da Silva", type: "mass" },
-      { time: "19:30", title: "Jantar", type: "meal" },
-      { time: "20:30", title: "Adoração ao Santíssimo Sacramento", type: "devotion" },
+      { time: "10:00", title: "Missa \"In Coena Domini\" — Consagração dos Santos Óleos", celebrant: "Dom Rodrigo da Silva", type: "mass" },
+      { time: "19:00", title: "Mandatum (Lava Pés)", type: "devotion" },
+      { time: "20:00", title: "Ofício de Trevas", type: "devotion" },
     ],
   },
   {
     day: "Sexta-feira", date: "3 de Abril", liturgicalName: "Sexta-feira Santa", color: "#DC2626",
     events: [
-      { time: "07:00", title: "Oração da manhã", type: "devotion" },
-      { time: "07:30", title: "Café da manhã", type: "meal" },
-      { time: "09:00", title: "Meditação sobre a Paixão", type: "devotion" },
-      { time: "10:00", title: "Via Sacra solene", celebrant: "Dom Rodrigo da Silva", type: "devotion" },
-      { time: "12:00", title: "Almoço (abstinência)", type: "meal" },
-      { time: "14:00", title: "Silêncio e recolhimento", type: "activity" },
-      { time: "15:00", title: "Liturgia da Paixão do Senhor", celebrant: "Dom Rodrigo da Silva", type: "mass" },
-      { time: "19:00", title: "Jantar (abstinência)", type: "meal" },
-      { time: "20:00", title: "Meditação noturna", type: "devotion" },
+      { time: "10:00", title: "Missa dos Pré-Santificados", celebrant: "Dom Rodrigo da Silva", type: "mass" },
+      { time: "15:00", title: "Sermão e Via Sacra", celebrant: "Dom Rodrigo da Silva", type: "devotion" },
+      { time: "20:00", title: "Ofício de Trevas", type: "devotion" },
     ],
   },
   {
     day: "Sábado", date: "4 de Abril", liturgicalName: "Sábado Santo", color: "#8B5CF6",
     events: [
-      { time: "07:00", title: "Oração da manhã", type: "devotion" },
-      { time: "07:30", title: "Café da manhã", type: "meal" },
-      { time: "09:00", title: "Palestra espiritual", type: "activity" },
-      { time: "10:30", title: "Confissões", type: "devotion" },
-      { time: "12:00", title: "Almoço", type: "meal" },
-      { time: "14:00", title: "Tempo livre / Oração pessoal", type: "activity" },
-      { time: "16:00", title: "Ensaios para a Vigília", type: "activity" },
-      { time: "20:00", title: "Vigília Pascal — Bênção do fogo, Exsultet, Batismos", celebrant: "Dom Rodrigo da Silva", type: "mass" },
-      { time: "23:00", title: "Ceia pascal festiva", type: "meal" },
+      { time: "10:00", title: "Vigília Pascal", celebrant: "Dom Rodrigo da Silva", type: "mass" },
     ],
   },
   {
     day: "Domingo", date: "5 de Abril", liturgicalName: "Domingo de Páscoa", color: "#EAB308",
     events: [
-      { time: "07:30", title: "Café da manhã festivo", type: "meal" },
-      { time: "09:00", title: "Missa Solene de Páscoa", celebrant: "Dom Rodrigo da Silva", type: "mass" },
-      { time: "11:00", title: "Almoço de confraternização", type: "meal" },
-      { time: "13:00", title: "Encerramento e despedida", type: "activity" },
-      { time: "14:00", title: "Check-out (ou pernoitar até 06/04)", type: "activity" },
+      { time: "10:00", title: "Confirmação & Missa de Páscoa", celebrant: "Dom Rodrigo da Silva", type: "mass" },
+      { time: "12:00", title: "Almoço festivo", type: "meal" },
     ],
   },
 ]
@@ -607,7 +575,7 @@ function RegistrationSection() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    if (!formData.gender || !formData.accommodationType) return
+    if (!formData.gender) return
     setStep("loading")
     try {
       const res = await fetch("https://webn8n.duobro.com.br/webhook/semana-santa-2026", {
@@ -674,24 +642,7 @@ function RegistrationSection() {
                   ))}
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-[#D4C5B0] mb-1.5">Tipo de hospedagem *</label>
-                <div className="grid grid-cols-1 gap-3">
-                  {[
-                    { value: "com_alimentacao" as const, label: "Com Alimentação", price: "R$ 600,00", desc: "Inclui todas as refeições (café, almoço e jantar)" },
-                    { value: "sem_alimentacao" as const, label: "Sem Alimentação", price: "R$ 500,00", desc: "Apenas hospedagem, alimentação por conta própria" },
-                  ].map((opt) => (
-                    <button key={opt.value} type="button" onClick={() => setFormData({ ...formData, accommodationType: opt.value })}
-                      className={`p-4 rounded-lg border text-left transition-all ${formData.accommodationType === opt.value ? "bg-gold/10 border-gold" : "bg-[#0C0A09] border-[#2E2821] hover:border-gold/30"}`}>
-                      <div className="flex justify-between items-center">
-                        <span className={`font-medium text-sm ${formData.accommodationType === opt.value ? "text-gold" : "text-[#D4C5B0]"}`}>{opt.label}</span>
-                        <span className="text-[#F5F0E8] font-bold">{opt.price}</span>
-                      </div>
-                      <p className="text-xs text-[#9C8E7C] mt-1">{opt.desc}</p>
-                    </button>
-                  ))}
-                </div>
-              </div>
+              {/* Tipo de hospedagem — oculto temporariamente */}
               <div>
                 <label className="block text-sm font-medium text-[#D4C5B0] mb-1.5">Número de pessoas</label>
                 <select value={formData.numberOfPeople} onChange={(e) => setFormData({ ...formData, numberOfPeople: Number(e.target.value) })}
@@ -705,19 +656,7 @@ function RegistrationSection() {
                   className="w-full bg-[#0C0A09] border border-[#2E2821] rounded-lg px-4 py-3 text-[#F5F0E8] placeholder-[#9C8E7C]/50 focus:border-gold focus:ring-1 focus:ring-gold/30 outline-none transition-colors resize-none"
                   placeholder="Restrições alimentares, necessidades especiais, etc." />
               </div>
-              {formData.accommodationType && (
-                <div className="bg-[#0C0A09] border border-[#2E2821] rounded-lg p-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-[#9C8E7C] text-sm">Total:</span>
-                    <span className="text-gold text-xl font-bold">
-                      R$ {((formData.accommodationType === "com_alimentacao" ? 600 : 500) * formData.numberOfPeople).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-                    </span>
-                  </div>
-                  <p className="text-[#9C8E7C] text-xs mt-1">
-                    {formData.numberOfPeople} {formData.numberOfPeople === 1 ? "pessoa" : "pessoas"} × R$ {formData.accommodationType === "com_alimentacao" ? "600,00" : "500,00"}
-                  </p>
-                </div>
-              )}
+              {/* Total — oculto temporariamente */}
               <button type="submit" className="w-full bg-gold hover:bg-gold-light text-[#0C0A09] font-bold py-4 rounded-lg text-base transition-all duration-300 hover:shadow-[0_0_25px_rgba(201,168,76,0.3)]">
                 Confirmar Inscrição
               </button>
@@ -799,9 +738,14 @@ export default function SemanaSanta2026Page() {
       <AboutSection />
       <ScheduleSection />
       <LocationSection />
-      <AccommodationSection />
-      <ValoresSection />
       <RegistrationSection />
+      <div className="relative">
+        <div className="absolute inset-0 backdrop-blur-sm bg-[#0C0A09]/40 z-20 rounded-lg pointer-events-none" style={{ filter: "blur(0px)" }} />
+        <div style={{ filter: "blur(6px)", opacity: 0.6, pointerEvents: "none" }}>
+          <AccommodationSection />
+          <ValoresSection />
+        </div>
+      </div>
       <SSFooter />
     </div>
   )
