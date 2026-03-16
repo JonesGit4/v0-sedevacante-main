@@ -678,12 +678,9 @@ function RegistrationSection() {
           {step === "done" && (
             <div className="bg-[#1A1714] border border-[#2E2821] rounded-2xl p-6 md:p-8 text-center">
               <div className="text-green-400 text-4xl mb-3">✓</div>
-              <h3 className="text-2xl font-bold text-[#F5F0E8] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Inscrição Confirmada!</h3>
-              <p className="text-[#D4C5B0] mb-4">
-                Obrigado, <span className="text-gold font-semibold">{formData.name}</span>!
-              </p>
+              <h3 className="text-2xl font-bold text-[#F5F0E8] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>{formData.name} Confirmado!</h3>
               <p className="text-[#D4C5B0] mb-6">
-                Enviamos as instruções de pagamento (PIX) para <span className="text-gold font-semibold">{formData.email}</span> e para seu WhatsApp.
+                Enviamos as instruções e maiores detalhes via e-mail e WhatsApp em breve.
               </p>
               <button type="button" onClick={() => { setStep("form"); setFormData({ name: "", email: "", phone: "", gender: "", accommodationType: "", numberOfPeople: 1, notes: "" }) }}
                 className="bg-gold/10 text-gold border border-gold/30 hover:bg-gold/20 font-semibold px-8 py-3 rounded-lg transition-all">
