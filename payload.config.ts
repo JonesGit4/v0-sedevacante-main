@@ -27,6 +27,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || "",
     },
+    push: true,
   }),
   sharp,
   typescript: {
