@@ -91,13 +91,15 @@ export default function FrontendLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className={`font-serif ${playfairDisplay.variable} ${crimsonText.variable} ${cinzelDecorative.variable} antialiased pb-20`}>
-      <LanguageProvider>
-        <DevModalProvider>
-          <Suspense fallback={null}>{children}</Suspense>
-          <Analytics />
-        </DevModalProvider>
-      </LanguageProvider>
-    </div>
+    <html lang="pt-BR">
+      <body className={`font-serif ${playfairDisplay.variable} ${crimsonText.variable} ${cinzelDecorative.variable} antialiased pb-20`}>
+        <LanguageProvider>
+          <DevModalProvider>
+            <Suspense fallback={null}>{children}</Suspense>
+            <Analytics />
+          </DevModalProvider>
+        </LanguageProvider>
+      </body>
+    </html>
   )
 }

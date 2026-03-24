@@ -19,6 +19,9 @@ export default buildConfig({
     meta: {
       titleSuffix: " | Sedevacante Admin",
     },
+    importMap: {
+      baseDir: path.resolve(dirname),
+    },
   },
   collections: [Users, Articles, Media],
   editor: lexicalEditor(),
