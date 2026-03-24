@@ -1,65 +1,34 @@
 import { NextResponse } from "next/server"
-import { getPayload } from "payload"
 import config from "@payload-config"
 
-export async function GET() {
+export async function GET(request: Request) {
   const results: Record<string, any> = {}
 
-  // Test 1: Payload init (confirmed working)
-  try {
-    const payload = await getPayload({ config })
-    results.payloadInit = true
-  } catch (e: any) {
-    results.payloadInitError = e.message
-  }
-
-  // Test 2: Test importMap components
-  const componentTests: Record<string, string> = {}
-
-  try {
-    const seoClient = await import("@payloadcms/plugin-seo/client")
-    componentTests.seoClient = Object.keys(seoClient).join(", ")
-  } catch (e: any) {
-    componentTests.seoClientError = e.message
-  }
-
-  try {
-    const lexicalClient = await import("@payloadcms/richtext-lexical/client")
-    componentTests.lexicalClient = Object.keys(lexicalClient).slice(0, 5).join(", ") + "..."
-    componentTests.lexicalClientCount = Object.keys(lexicalClient).length
-  } catch (e: any) {
-    componentTests.lexicalClientError = e.message
-  }
-
-  try {
-    const lexicalRsc = await import("@payloadcms/richtext-lexical/rsc")
-    componentTests.lexicalRsc = Object.keys(lexicalRsc).join(", ")
-  } catch (e: any) {
-    componentTests.lexicalRscError = e.message
-  }
-
-  results.componentTests = componentTests
-
-  // Test 3: Try to render admin view
+  // Test: Actually try to render the admin page
   try {
     const { RootPage } = await import("@payloadcms/next/views")
-    results.rootPageLoaded = typeof RootPage
+    const { importMap } = await import("../../(payload)/admin/importMap")
+
+    results.importMapKeys = Object.keys(importMap).length
+    results.importMapSample = Object.keys(importMap).slice(0, 3)
+
+    // Try calling RootPage like the actual page does
+    const params = Promise.resolve({ segments: ["login"] })
+    const searchParams = Promise.resolve({})
+
+    const element = await RootPage({ config, params, searchParams, importMap })
+    results.renderSuccess = true
+    results.elementType = typeof element
   } catch (e: any) {
-    results.rootPageError = e.message
-    results.rootPageStack = e.stack?.split("\n").slice(0, 5)
+    results.renderError = e.message
+    results.renderStack = e.stack?.split("\n").slice(0, 10)
+    results.renderName = e.name
+    // Check if it's a redirect (expected for /admin -> /admin/login)
+    if (e.digest) {
+      results.digest = e.digest
+    }
   }
 
-  try {
-    const { RootLayout } = await import("@payloadcms/next/layouts")
-    results.rootLayoutLoaded = typeof RootLayout
-  } catch (e: any) {
-    results.rootLayoutError = e.message
-    results.rootLayoutStack = e.stack?.split("\n").slice(0, 5)
-  }
-
-  // Test 4: Node/env info
   results.nodeVersion = process.version
-  results.secretLength = process.env.PAYLOAD_SECRET?.length ?? 0
-
   return NextResponse.json(results)
 }
