@@ -145,7 +145,7 @@ function HeroSection() {
             <div className="flex flex-wrap justify-center lg:justify-start gap-6 mb-10">
               {[
                 { icon: <BookOpen size={18} />, label: "400+ Páginas" },
-                { icon: <FileText size={18} />, label: "12 Capítulos" },
+                { icon: <FileText size={18} />, label: "8 Capítulos" },
                 { icon: <Globe size={18} />, label: "Edição Brasileira" },
               ].map((stat) => (
                 <div
@@ -170,7 +170,7 @@ function HeroSection() {
               <div className="text-sm text-[#8A8078]">
                 <span className="text-[#C9A84C] font-bold text-lg">R$89,90</span>
                 <span className="ml-1">no 1º Lote</span>
-                <span className="block text-xs mt-0.5">35% de desconto · Vagas limitadas</span>
+                <span className="block text-xs mt-0.5">25% de desconto · Unidades limitadas</span>
                 <span className="block text-xs mt-0.5 text-green-500 font-semibold">Frete grátis</span>
               </div>
             </div>
@@ -227,7 +227,7 @@ function AboutPapasSection() {
             <div className="flex items-center gap-3">
               <div className="w-[3px] h-10 bg-[#C9A84C] rounded-full" />
               <div>
-                <span className="font-cinzel-decorative text-[#C9A84C] text-3xl sm:text-4xl font-bold tracking-wide">12</span>
+                <span className="font-cinzel-decorative text-[#C9A84C] text-3xl sm:text-4xl font-bold tracking-wide">8</span>
                 <p className="text-[10px] sm:text-xs text-[#8A8078] tracking-[0.2em] uppercase mt-0.5">Capítulos</p>
               </div>
             </div>
@@ -471,7 +471,7 @@ function BishopSection() {
                   Dom Rodrigo da Silva
                 </p>
                 <p className="text-[#8A8078] text-sm mt-0.5">
-                  Bispo
+                  Bispo Católico
                 </p>
               </div>
             </div>
@@ -509,7 +509,7 @@ function PricingSection() {
       active: true,
       originalPrice: "R$139,90",
       price: "R$89,90",
-      discount: "35% off",
+      discount: "25% off",
       note: "Frete grátis",
       features: [
         "Preço exclusivo de lançamento",
@@ -524,7 +524,7 @@ function PricingSection() {
       active: false,
       originalPrice: "R$139,90",
       price: "R$99,90",
-      discount: "20% off",
+      discount: "16% off",
       note: "+frete",
       features: [
         "Desconto de segundo lote",
@@ -1229,7 +1229,7 @@ function DonationSection() {
             Apoie o Seminário São José
           </h2>
           <p className="text-[#8A8078] text-base mb-8 leading-relaxed">
-            Contribua para a formação de sacerdotes fiéis à Tradição. Sua doação ajuda a manter o Seminário São José e sua missão de preservar a fé católica.
+            Contribua para a formação de sacerdotes fiéis à Tradição. Sua doação ajuda a manter o Seminário São José e sua missão de preservar a Fé Católica.
           </p>
 
           {!showForm && step === "form" && (
