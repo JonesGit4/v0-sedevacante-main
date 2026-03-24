@@ -22,7 +22,7 @@ export default buildConfig({
   },
   collections: [Users, Articles, Media],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || "sedevacante-payload-secret-key-2026",
+  secret: process.env.PAYLOAD_SECRET || "sdv-payload-secret-2026-sssj-sede-vac",
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL || "",
