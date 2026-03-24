@@ -4,11 +4,11 @@ import type React from "react"
 export const metadata: Metadata = {
   title: "A Crise de Autoridade na Igreja — Maxence Hecquard | Sedevacante",
   description:
-    "Os papas do Vaticano II são legítimos? Obra fundamental de Maxence Hecquard traduzida para o português. 400+ páginas. Garanta seu exemplar no 1º Lote com 35% de desconto.",
+    "Os papas do Vaticano II são legítimos? Obra fundamental de Maxence Hecquard traduzida para o português. 400+ páginas. Garanta seu exemplar no 1º Lote com 25% de desconto.",
   openGraph: {
     title: "A Crise de Autoridade na Igreja — Maxence Hecquard",
     description:
-      "Os papas do Vaticano II são legítimos? 400+ páginas de análise teológica. 1º Lote com 35% de desconto.",
+      "Os papas do Vaticano II são legítimos? 400+ páginas de análise teológica. 1º Lote com 25% de desconto.",
     url: "https://sedevacante.com.br/livrocrisenaigreja",
     siteName: "Sedevacante",
     images: [
@@ -25,5 +25,5 @@ export const metadata: Metadata = {
 }
 
 export default function LivroCriseLayout({ children }: { children: React.ReactNode }) {
-  return <div className="!pb-0">{children}</div>
+  return <div className="!pb-0 !mb-[-5rem]">{children}</div>
 }
