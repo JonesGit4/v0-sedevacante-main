@@ -688,30 +688,21 @@ function PurchaseSection() {
       const correlationID = `order-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
       const totalCents = pricePerUnit * form.quantity
 
-      const res = await fetch("https://webn8n.duobro.com.br/webhook/book-maxence", {
+      const res = await fetch("/api/pix-charge", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type: "purchase",
           correlationID,
           name: form.name,
           email: form.email,
           phone: form.phone,
           quantity: form.quantity,
           totalAmount: totalCents / 100,
-          tier: "lote1",
           cpf: form.cpf,
-          rua: form.rua,
-          numero: form.numero,
-          complemento: form.complemento || undefined,
-          bairro: form.bairro,
-          cidade: form.cidade,
-          uf: form.uf,
-          cep: form.cep,
         }),
       })
 
-      if (!res.ok) throw new Error("Webhook error")
+      if (!res.ok) throw new Error("Erro ao gerar cobrança PIX")
 
       const data = await res.json().catch(() => ({}))
 
@@ -841,7 +832,7 @@ function PurchaseSection() {
                             setForm((prev) => ({ ...prev, cep: formatted }))
                             if (cep.length === 8) {
                               try {
-                                const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                                const res = await fetch(`/api/cep?cep=${cep}`)
                                 const data = await res.json()
                                 if (!data.erro) {
                                   setForm((prev) => ({
@@ -1139,19 +1130,17 @@ function DonationSection() {
     try {
       const correlationID = `donation-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 
-      const res = await fetch("https://webn8n.duobro.com.br/webhook/book-maxence", {
+      const res = await fetch("/api/pix-donation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type: "donation",
-          correlationID,
           name: form.name,
           email: form.email,
           amount: amountNum,
         }),
       })
 
-      if (!res.ok) throw new Error("Erro")
+      if (!res.ok) throw new Error("Erro ao gerar doação PIX")
 
       const data = await res.json().catch(() => ({}))
 
