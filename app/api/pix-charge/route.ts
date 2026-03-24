@@ -17,16 +17,17 @@ export async function POST(req: NextRequest) {
     const payload: Record<string, unknown> = {
       correlationID,
       value: valueCents,
-      comment: `Livro A Crise - ${quantity}x - ${name} - ${email}`,
+      comment: `Livro - ${quantity}x - ${name}`,
     }
 
-    // Add customer if CPF is provided
-    if (cpf) {
+    // Add customer only with validated CPF (11 digits)
+    const cleanCpf = cpf?.replace(/\D/g, "") || ""
+    if (cleanCpf.length === 11) {
       payload.customer = {
         name,
         email,
         phone: phone?.replace(/\D/g, "") || undefined,
-        taxID: { taxID: cpf.replace(/\D/g, ""), type: "BR:CPF" },
+        taxID: cleanCpf,
       }
     }
 

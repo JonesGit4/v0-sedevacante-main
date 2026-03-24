@@ -673,8 +673,26 @@ function PurchaseSection() {
     correlationID: string
   } | null>(null)
   const [error, setError] = useState("")
+  const [cpfError, setCpfError] = useState("")
+  const [cepError, setCepError] = useState("")
   const [copied, setCopied] = useState(false)
   const formRef = useRef<HTMLFormElement>(null)
+
+  function validateCPF(cpf: string): boolean {
+    const nums = cpf.replace(/\D/g, "")
+    if (nums.length !== 11) return false
+    if (/^(\d)\1+$/.test(nums)) return false
+    let sum = 0
+    for (let i = 0; i < 9; i++) sum += parseInt(nums[i]) * (10 - i)
+    let rest = (sum * 10) % 11
+    if (rest === 10) rest = 0
+    if (rest !== parseInt(nums[9])) return false
+    sum = 0
+    for (let i = 0; i < 10; i++) sum += parseInt(nums[i]) * (11 - i)
+    rest = (sum * 10) % 11
+    if (rest === 10) rest = 0
+    return rest === parseInt(nums[10])
+  }
 
   const pricePerUnit = 8990 // R$89,90 in cents
   const priceDisplay = "R$89,90"
@@ -682,6 +700,28 @@ function PurchaseSection() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setError("")
+    setCpfError("")
+    setCepError("")
+
+    // Validate CPF
+    if (!validateCPF(form.cpf)) {
+      setCpfError("CPF inválido. Verifique e tente novamente.")
+      return
+    }
+
+    // Validate CEP
+    const cleanCep = form.cep.replace(/\D/g, "")
+    if (cleanCep.length !== 8) {
+      setCepError("CEP inválido. Digite os 8 dígitos.")
+      return
+    }
+
+    // Validate address fields filled (CEP lookup must have worked)
+    if (!form.rua || !form.bairro || !form.cidade || !form.uf) {
+      setCepError("CEP não encontrado. Verifique e tente novamente.")
+      return
+    }
+
     setStep("processing")
 
     try {
@@ -805,10 +845,27 @@ function PurchaseSection() {
                     type="text"
                     required
                     value={form.cpf}
-                    onChange={(e) => setForm({ ...form, cpf: e.target.value })}
-                    className="livro-dark-input w-full px-4 py-3 rounded-xl text-sm"
+                    onChange={(e) => {
+                      const nums = e.target.value.replace(/\D/g, "").slice(0, 11)
+                      let formatted = nums
+                      if (nums.length > 9) formatted = `${nums.slice(0,3)}.${nums.slice(3,6)}.${nums.slice(6,9)}-${nums.slice(9)}`
+                      else if (nums.length > 6) formatted = `${nums.slice(0,3)}.${nums.slice(3,6)}.${nums.slice(6)}`
+                      else if (nums.length > 3) formatted = `${nums.slice(0,3)}.${nums.slice(3)}`
+                      setForm({ ...form, cpf: formatted })
+                      if (cpfError) setCpfError("")
+                    }}
+                    onBlur={() => {
+                      if (form.cpf && !validateCPF(form.cpf)) {
+                        setCpfError("CPF inválido")
+                      } else {
+                        setCpfError("")
+                      }
+                    }}
+                    maxLength={14}
+                    className={`livro-dark-input w-full px-4 py-3 rounded-xl text-sm ${cpfError ? "border border-red-500" : ""}`}
                     placeholder="000.000.000-00"
                   />
+                  {cpfError && <p className="text-red-400 text-xs mt-1">{cpfError}</p>}
                 </div>
 
                 {/* Endereço de Entrega */}
@@ -829,7 +886,8 @@ function PurchaseSection() {
                           onChange={async (e) => {
                             const cep = e.target.value.replace(/\D/g, "")
                             const formatted = cep.length > 5 ? cep.slice(0, 5) + "-" + cep.slice(5, 8) : cep
-                            setForm((prev) => ({ ...prev, cep: formatted }))
+                            setForm((prev) => ({ ...prev, cep: formatted, rua: "", bairro: "", cidade: "", uf: "" }))
+                            if (cepError) setCepError("")
                             if (cep.length === 8) {
                               try {
                                 const res = await fetch(`/api/cep?cep=${cep}`)
@@ -843,14 +901,20 @@ function PurchaseSection() {
                                     cidade: data.localidade || "",
                                     uf: data.uf || "",
                                   }))
+                                  setCepError("")
+                                } else {
+                                  setCepError("CEP não encontrado")
                                 }
-                              } catch {}
+                              } catch {
+                                setCepError("Erro ao buscar CEP")
+                              }
                             }
                           }}
                           maxLength={9}
-                          className="livro-dark-input w-full px-3 py-2.5 rounded-xl text-sm"
+                          className={`livro-dark-input w-full px-3 py-2.5 rounded-xl text-sm ${cepError ? "border border-red-500" : ""}`}
                           placeholder="00000-000"
                         />
+                        {cepError && <p className="text-red-400 text-xs mt-1">{cepError}</p>}
                       </div>
                       <div>
                         <label className="block text-xs font-medium text-[#D4C8B8] mb-1">
