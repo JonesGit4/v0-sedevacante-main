@@ -28,17 +28,34 @@ const cinzelDecorative = Cinzel_Decorative({
 })
 
 export const metadata: Metadata = {
-  title: "Sedevacante - Roman Catholic Apostolic Tradition",
+  title: "Sedevacante — Tradição Católica Apostólica Romana",
   description:
-    "Preserving the true faith and timeless traditions of the Catholic Church through authentic communities spread throughout the world.",
-  generator: "v0.app",
+    "Preservando a verdadeira Fé e as tradições perenes da Igreja Católica através de comunidades autênticas espalhadas por todo o mundo.",
   icons: {
     icon: "/images/sede_favicon.png",
   },
+  keywords: [
+    "sedevacante",
+    "tradição católica",
+    "Igreja Católica",
+    "sede vacante",
+    "católico tradicional",
+    "missa tridentina",
+    "Vaticano II",
+    "catolicismo",
+    "tradicionalismo",
+    "Dom Rodrigo da Silva",
+    "Dom Altamira",
+    "Dom Roy",
+    "escapulário verde",
+    "escapulário do Carmo",
+    "cordão de São José",
+    "Seminário São José",
+  ],
   openGraph: {
-    title: "Sedevacante - Roman Catholic Apostolic Tradition",
+    title: "Sedevacante — Tradição Católica Apostólica Romana",
     description:
-      "Preserving the true faith and timeless traditions of the Catholic Church through authentic communities spread throughout the world.",
+      "Preservando a verdadeira Fé e as tradições perenes da Igreja Católica através de comunidades autênticas espalhadas por todo o mundo.",
     url: "https://sedevacante.com.br",
     siteName: "Sedevacante",
     images: [
@@ -46,7 +63,7 @@ export const metadata: Metadata = {
         url: "/images/bishops-02.jpg",
         width: 1200,
         height: 630,
-        alt: "Sedevacante - Traditional Catholic Community",
+        alt: "Sedevacante — Comunidade Católica Tradicional",
       },
     ],
     locale: "pt_BR",
@@ -54,9 +71,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sedevacante - Roman Catholic Apostolic Tradition",
+    title: "Sedevacante — Tradição Católica Apostólica Romana",
     description:
-      "Preserving the true faith and timeless traditions of the Catholic Church through authentic communities spread throughout the world.",
+      "Preservando a verdadeira Fé e as tradições perenes da Igreja Católica através de comunidades autênticas espalhadas por todo o mundo.",
     images: ["/images/bishops-02.jpg"],
   },
   alternates: {
@@ -74,7 +91,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body className={`font-serif ${playfairDisplay.variable} ${crimsonText.variable} ${cinzelDecorative.variable} antialiased pb-20`}>
         <LanguageProvider>
           <DevModalProvider>
