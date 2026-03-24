@@ -1,30 +1,33 @@
 import { NextResponse } from "next/server"
+import { getPayload } from "payload"
+import config from "@payload-config"
 
 export async function GET() {
+  const results: Record<string, any> = {}
+
+  // Test 1: Config
   try {
-    // Test 1: Import payload config
-    const config = await import("@payload-config")
-
-    // Test 2: Try to import the admin views
-    const views = await import("@payloadcms/next/views")
-
-    // Test 3: Try to import the importMap
-    const importMapModule = await import("../../../(payload)/admin/importMap.js")
-    const importMapKeys = Object.keys(importMapModule.importMap || {})
-
-    return NextResponse.json({
-      status: "ok",
-      configLoaded: !!config.default,
-      viewsLoaded: !!views.RootPage,
-      importMapKeys: importMapKeys.length,
-      importMapSample: importMapKeys.slice(0, 3),
-    })
-  } catch (error: any) {
-    return NextResponse.json({
-      status: "error",
-      message: error.message,
-      stack: error.stack?.split("\n").slice(0, 10),
-      name: error.name,
-    }, { status: 500 })
+    results.configLoaded = !!config
+    results.configCollections = config?.collections?.length ?? "none"
+  } catch (e: any) {
+    results.configError = e.message
   }
+
+  // Test 2: Init Payload
+  try {
+    const payload = await getPayload({ config })
+    results.payloadInit = true
+    results.collections = payload.collections ? Object.keys(payload.collections) : []
+  } catch (e: any) {
+    results.payloadInitError = e.message
+    results.payloadInitStack = e.stack?.split("\n").slice(0, 8)
+  }
+
+  // Test 3: Check Node version and env
+  results.nodeVersion = process.version
+  results.hasDbUrl = !!process.env.DATABASE_URL
+  results.hasSecret = !!process.env.PAYLOAD_SECRET
+  results.secretLength = process.env.PAYLOAD_SECRET?.length ?? 0
+
+  return NextResponse.json(results)
 }
