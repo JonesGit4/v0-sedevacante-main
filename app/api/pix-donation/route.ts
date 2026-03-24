@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     const payload = {
       correlationID,
       value: valueCents,
-      comment: `Doação Seminário São José — ${name} — ${email}`,
+      comment: `Doacao Seminario Sao Jose - ${name} - ${email}`,
     }
 
     const res = await fetch(OPENPIX_API, {

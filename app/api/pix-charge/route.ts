@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     const payload: Record<string, unknown> = {
       correlationID,
       value: valueCents,
-      comment: `Livro A Crise — ${quantity}x — ${name} — ${email}`,
+      comment: `Livro A Crise - ${quantity}x - ${name} - ${email}`,
     }
 
     // Add customer if CPF is provided
