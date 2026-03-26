@@ -11,6 +11,15 @@ export async function GET(request: Request) {
   const token = process.env.BLOB_READ_WRITE_TOKEN || ""
 
   try {
+    if (action === "schema") {
+      const payload = await getPayload({ config })
+      const db = (payload.db as any).drizzle
+      const result = await db.execute(
+        `SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = 'media' ORDER BY ordinal_position`
+      )
+      return NextResponse.json({ columns: result })
+    }
+
     if (action === "list-all") {
       const blobs = await list({ token })
       return NextResponse.json({
