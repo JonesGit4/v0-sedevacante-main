@@ -55,7 +55,33 @@ export const News: CollectionConfig = {
       name: "image",
       type: "upload",
       relationTo: "media",
-      label: "Imagem",
+      label: "Imagem de Capa",
+      admin: {
+        description: "Imagem principal exibida no card.",
+      },
+    },
+    {
+      name: "gallery",
+      type: "array",
+      label: "Galeria de Fotos",
+      maxRows: 5,
+      admin: {
+        description: "Até 5 fotos adicionais. Ao clicar na notícia, abre a galeria.",
+      },
+      fields: [
+        {
+          name: "photo",
+          type: "upload",
+          relationTo: "media",
+          required: true,
+          label: "Foto",
+        },
+        {
+          name: "caption",
+          type: "text",
+          label: "Legenda",
+        },
+      ],
     },
     {
       name: "date",

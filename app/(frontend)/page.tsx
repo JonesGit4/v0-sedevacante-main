@@ -35,7 +35,7 @@ export default async function Home() {
         where: { status: { equals: "published" } },
         sort: "-date",
         limit: 4,
-        depth: 1,
+        depth: 2,
       }),
     ])
 
