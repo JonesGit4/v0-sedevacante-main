@@ -1,0 +1,189 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e154]:
+    - button "Open Menu" [ref=e156] [cursor=pointer]:
+      - generic "Open" [ref=e158]:
+        - img [ref=e159]
+    - generic [ref=e161]:
+      - complementary [ref=e162]:
+        - navigation [ref=e164]:
+          - generic [ref=e165]:
+            - button "Collections" [ref=e166] [cursor=pointer]:
+              - generic [ref=e167]: Collections
+              - img [ref=e169]
+            - generic [ref=e173]:
+              - link "Usuários" [ref=e174] [cursor=pointer]:
+                - /url: /admin/collections/users
+                - generic [ref=e175]: Usuários
+              - link "Artigos" [ref=e176] [cursor=pointer]:
+                - /url: /admin/collections/articles
+                - generic [ref=e177]: Artigos
+              - link "Notícias" [ref=e178] [cursor=pointer]:
+                - /url: /admin/collections/news
+                - generic [ref=e180]: Notícias
+              - link "Mídias" [ref=e181] [cursor=pointer]:
+                - /url: /admin/collections/media
+                - generic [ref=e182]: Mídias
+          - link "Log out" [ref=e184] [cursor=pointer]:
+            - /url: /admin/logout
+            - img [ref=e185]
+      - generic [ref=e189]:
+        - banner [ref=e190]:
+          - generic [ref=e193]:
+            - navigation [ref=e195]:
+              - link [ref=e196] [cursor=pointer]:
+                - /url: /admin
+                - generic "Dashboard" [ref=e197]:
+                  - img [ref=e198]
+              - generic [ref=e201]: /
+              - link "Notícias" [ref=e202] [cursor=pointer]:
+                - /url: /admin/collections/news
+                - generic [ref=e203]: Notícias
+              - generic [ref=e204]: /
+              - generic [ref=e205]: Dom Rodrigo em Brasília-DF
+            - link "Account" [ref=e206] [cursor=pointer]:
+              - /url: /admin/account
+              - img "yas" [ref=e207]
+        - generic [ref=e209]:
+          - heading "Dom Rodrigo em Brasília-DF" [level=1] [ref=e210]
+          - list [ref=e213]:
+            - generic "Edit" [ref=e214]:
+              - generic:
+                - generic:
+                  - generic: Edit
+            - link "API" [ref=e215] [cursor=pointer]:
+              - /url: /admin/collections/news/1/api
+              - generic:
+                - generic:
+                  - generic: API
+        - main [ref=e216]:
+          - generic [ref=e217]:
+            - generic [ref=e219]:
+              - list [ref=e221]:
+                - listitem "March 26th 2026, 5:51 PM" [ref=e222]:
+                  - paragraph [ref=e223]: "Last Modified:"
+                  - paragraph [ref=e224]: March 26th 2026, 5:51 PM
+                - listitem "March 26th 2026, 5:01 PM" [ref=e225]:
+                  - paragraph [ref=e226]: "Created:"
+                  - paragraph [ref=e227]: March 26th 2026, 5:01 PM
+              - generic [ref=e228]:
+                - button "Save" [disabled] [ref=e231]:
+                  - generic:
+                    - generic: Save
+                - button [ref=e234] [cursor=pointer]
+            - generic [ref=e242]:
+              - generic [ref=e245]:
+                - generic [ref=e246]:
+                  - generic [ref=e247]:
+                    - text: Título
+                    - generic [ref=e248]: "*"
+                  - textbox "Título *" [ref=e250]: Dom Rodrigo em Brasília-DF
+                - generic [ref=e251]:
+                  - generic [ref=e252]:
+                    - text: Descrição
+                    - generic [ref=e253]: "*"
+                  - textbox "Descrição *" [ref=e256]: Nos dias 22 a 24 de março, Dom Rodrigo realizou sua visita pastoral à nossa comunidade em Brasília. Com grande alegria, ele presidiu a Santa Missa e administrou o Sacramento da Crisma aos nossos jovens e adultos. Foi um tempo de graça, renovação e fortalecimento da fé para toda a paróquia. Agradecemos a Deus por esta bênção!
+                - generic [ref=e257]:
+                  - generic [ref=e258]: Imagem de Capa
+                  - generic [ref=e261]:
+                    - generic [ref=e262]:
+                      - img "Dom BSB 02" [ref=e264]
+                      - generic [ref=e265]:
+                        - paragraph [ref=e266]:
+                          - link "Dom_BSB_02.jpeg" [ref=e267] [cursor=pointer]:
+                            - /url: /api/media/file/Dom_BSB_02.jpeg
+                        - paragraph [ref=e268]: 123KB — image/jpeg
+                    - generic [ref=e269]:
+                      - button [ref=e270] [cursor=pointer]:
+                        - generic:
+                          - generic:
+                            - img
+                      - button [ref=e271] [cursor=pointer]:
+                        - generic:
+                          - generic:
+                            - img
+                  - generic [ref=e272]: Imagem principal exibida no card.
+                - generic [ref=e273]:
+                  - generic [ref=e274]:
+                    - generic [ref=e275]:
+                      - heading "Galeria de Fotos" [level=3] [ref=e277]
+                      - list [ref=e278]:
+                        - listitem [ref=e279]:
+                          - button [ref=e282] [cursor=pointer]:
+                            - img [ref=e283]
+                    - generic [ref=e287]: Até 5 fotos adicionais. Ao clicar na notícia, abre a galeria.
+                  - button "Add Gallery" [ref=e288] [cursor=pointer]:
+                    - generic:
+                      - generic: Add Gallery
+                      - generic:
+                        - img
+              - generic [ref=e292]:
+                - generic [ref=e293]:
+                  - generic [ref=e294]:
+                    - text: Etiqueta
+                    - generic [ref=e295]: "*"
+                  - generic [ref=e297]:
+                    - log [ref=e299]
+                    - generic [ref=e300]:
+                      - generic "Notícia" [ref=e301]:
+                        - generic [ref=e302]:
+                          - generic [ref=e303]: Notícia
+                          - combobox [ref=e305]
+                      - generic [ref=e306]:
+                        - button [ref=e307] [cursor=pointer]:
+                          - img [ref=e308]
+                        - button [ref=e310] [cursor=pointer]:
+                          - img [ref=e311]
+                - generic [ref=e313]:
+                  - generic [ref=e314]:
+                    - text: Data
+                    - generic [ref=e315]: "*"
+                  - generic [ref=e317]:
+                    - generic:
+                      - button [ref=e318] [cursor=pointer]:
+                        - img [ref=e319]
+                      - img
+                    - textbox [ref=e324]: Mar 26
+                - generic [ref=e325]:
+                  - generic [ref=e326]:
+                    - generic [ref=e327]:
+                      - checkbox "Destaque na homepage" [checked] [ref=e328]
+                      - img [ref=e330]
+                    - generic [ref=e332]: Destaque na homepage
+                  - generic [ref=e333]: Marque para exibir como card principal.
+                - generic [ref=e334]:
+                  - generic [ref=e335]:
+                    - text: Status
+                    - generic [ref=e336]: "*"
+                  - generic [ref=e338]:
+                    - log [ref=e340]
+                    - generic [ref=e341]:
+                      - generic "Publicado" [ref=e342]:
+                        - generic [ref=e343]:
+                          - generic [ref=e344]: Publicado
+                          - combobox [ref=e346]
+                      - generic [ref=e347]:
+                        - button [ref=e348] [cursor=pointer]:
+                          - img [ref=e349]
+                        - button [ref=e351] [cursor=pointer]:
+                          - img [ref=e352]
+                - generic [ref=e354]:
+                  - generic [ref=e355]: Created By
+                  - generic [ref=e357]:
+                    - generic:
+                      - log
+                      - generic:
+                        - generic "Jones Lauriano":
+                          - generic:
+                            - generic:
+                              - generic "Jones Lauriano":
+                                - generic:
+                                  - generic: Jones Lauriano
+                                  - button "Edit Jones Lauriano" [disabled] [ref=e358] [cursor=pointer]:
+                                    - img [ref=e359]
+                        - generic:
+                          - button [disabled]:
+                            - img
+        - status [ref=e361]
+  - status [ref=e152]
+  - region "Notifications alt+T"
+  - alert [ref=e153]: Editing - Notícia | Sedevacante Admin

@@ -1,0 +1,116 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e4]:
+    - button "Open Menu" [ref=e6] [cursor=pointer]:
+      - generic "Open" [ref=e8]:
+        - img [ref=e9]
+    - generic [ref=e11]:
+      - complementary [ref=e12]:
+        - navigation [ref=e14]:
+          - generic [ref=e15]:
+            - button "Collections" [ref=e16] [cursor=pointer]:
+              - generic [ref=e17]: Collections
+              - img [ref=e19]
+            - generic [ref=e23]:
+              - link "Usuários" [ref=e24] [cursor=pointer]:
+                - /url: /admin/collections/users
+                - generic [ref=e25]: Usuários
+              - link "Artigos" [ref=e26] [cursor=pointer]:
+                - /url: /admin/collections/articles
+                - generic [ref=e27]: Artigos
+              - generic [ref=e30]: Notícias
+              - link "Mídias" [ref=e31] [cursor=pointer]:
+                - /url: /admin/collections/media
+                - generic [ref=e32]: Mídias
+          - link "Log out" [ref=e34] [cursor=pointer]:
+            - /url: /admin/logout
+            - img [ref=e35]
+      - generic [ref=e39]:
+        - banner [ref=e40]:
+          - generic [ref=e43]:
+            - navigation [ref=e45]:
+              - link [ref=e46] [cursor=pointer]:
+                - /url: /admin
+                - generic "Dashboard" [ref=e47]:
+                  - img [ref=e48]
+              - generic [ref=e51]: /
+              - generic [ref=e52]: Notícias
+            - link "Account" [ref=e53] [cursor=pointer]:
+              - /url: /admin/account
+              - img "yas" [ref=e54]
+        - generic [ref=e56]:
+          - banner [ref=e57]:
+            - generic [ref=e59]:
+              - heading "Notícias" [level=1] [ref=e60]
+              - link "Create new Notícia" [ref=e62] [cursor=pointer]:
+                - /url: /admin/collections/news/create
+                - generic:
+                  - generic: Create New
+          - generic [ref=e64]:
+            - img
+            - textbox "Search by Título" [ref=e66]
+            - generic [ref=e67]:
+              - button "Columns" [ref=e68] [cursor=pointer]:
+                - generic [ref=e69]: Columns
+                - img [ref=e71]
+              - button "Filters" [ref=e73] [cursor=pointer]:
+                - generic [ref=e74]: Filters
+                - img [ref=e76]
+          - table [ref=e81]:
+            - rowgroup [ref=e82]:
+              - row "select-all Título Sort by Título Ascending Sort by Título Descending Etiqueta Sort by Etiqueta Ascending Sort by Etiqueta Descending Status Sort by Status Ascending Sort by Status Descending Data Sort by Data Ascending Sort by Data Descending" [ref=e83]:
+                - columnheader "select-all" [ref=e84]:
+                  - checkbox "select-all" [ref=e87]
+                - columnheader "Título Sort by Título Ascending Sort by Título Descending" [ref=e88]:
+                  - generic [ref=e89]:
+                    - generic [ref=e90]: Título
+                    - generic [ref=e91]:
+                      - button "Sort by Título Ascending" [ref=e92] [cursor=pointer]:
+                        - img [ref=e93]
+                      - button "Sort by Título Descending" [ref=e95] [cursor=pointer]:
+                        - img [ref=e96]
+                - columnheader "Etiqueta Sort by Etiqueta Ascending Sort by Etiqueta Descending" [ref=e98]:
+                  - generic [ref=e99]:
+                    - generic [ref=e100]: Etiqueta
+                    - generic [ref=e101]:
+                      - button "Sort by Etiqueta Ascending" [ref=e102] [cursor=pointer]:
+                        - img [ref=e103]
+                      - button "Sort by Etiqueta Descending" [ref=e105] [cursor=pointer]:
+                        - img [ref=e106]
+                - columnheader "Status Sort by Status Ascending Sort by Status Descending" [ref=e108]:
+                  - generic [ref=e109]:
+                    - generic [ref=e110]: Status
+                    - generic [ref=e111]:
+                      - button "Sort by Status Ascending" [ref=e112] [cursor=pointer]:
+                        - img [ref=e113]
+                      - button "Sort by Status Descending" [ref=e115] [cursor=pointer]:
+                        - img [ref=e116]
+                - columnheader "Data Sort by Data Ascending Sort by Data Descending" [ref=e118]:
+                  - generic [ref=e119]:
+                    - generic [ref=e120]: Data
+                    - generic [ref=e121]:
+                      - button "Sort by Data Ascending" [ref=e122] [cursor=pointer]:
+                        - img [ref=e123]
+                      - button "Sort by Data Descending" [ref=e125] [cursor=pointer]:
+                        - img [ref=e126]
+            - rowgroup [ref=e128]:
+              - row "Dom Rodrigo em Brasília-DF Notícia Publicado March 26th 2026, 12:00 PM" [ref=e129]:
+                - cell [ref=e130]:
+                  - checkbox [ref=e133]
+                - cell "Dom Rodrigo em Brasília-DF" [ref=e134]:
+                  - link "Dom Rodrigo em Brasília-DF" [ref=e135] [cursor=pointer]:
+                    - /url: /admin/collections/news/1
+                - cell "Notícia" [ref=e136]:
+                  - generic [ref=e137]: Notícia
+                - cell "Publicado" [ref=e138]:
+                  - generic [ref=e139]: Publicado
+                - cell "March 26th 2026, 12:00 PM" [ref=e140]:
+                  - generic [ref=e141]: March 26th 2026, 12:00 PM
+          - generic [ref=e142]:
+            - generic [ref=e143]: 1-1 of 1
+            - 'button "Per Page: 10" [ref=e147] [cursor=pointer]':
+              - generic [ref=e148]:
+                - generic [ref=e149]: "Per Page: 10"
+                - img [ref=e150]
+  - status [ref=e152]
+  - region "Notifications alt+T"
+  - alert [ref=e153]
