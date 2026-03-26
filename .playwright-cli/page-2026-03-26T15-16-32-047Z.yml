@@ -1,0 +1,53 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e4]:
+    - button "Open Menu" [ref=e6] [cursor=pointer]:
+      - generic "Open" [ref=e8]:
+        - img [ref=e9]
+    - generic [ref=e11]:
+      - complementary [ref=e12]:
+        - navigation [ref=e14]:
+          - generic [ref=e15]:
+            - button "Collections" [ref=e16] [cursor=pointer]:
+              - generic [ref=e17]: Collections
+              - img [ref=e19]
+            - generic [ref=e23]:
+              - link "Usuários" [ref=e24] [cursor=pointer]:
+                - /url: /admin/collections/users
+                - generic [ref=e25]: Usuários
+              - link "Artigos" [ref=e26] [cursor=pointer]:
+                - /url: /admin/collections/articles
+                - generic [ref=e27]: Artigos
+              - link "Notícias" [ref=e28] [cursor=pointer]:
+                - /url: /admin/collections/news
+                - generic [ref=e29]: Notícias
+              - link "Mídias" [ref=e30] [cursor=pointer]:
+                - /url: /admin/collections/media
+                - generic [ref=e31]: Mídias
+          - link "Log out" [ref=e33] [cursor=pointer]:
+            - /url: /admin/logout
+            - img [ref=e34]
+      - generic [ref=e38]:
+        - banner [ref=e39]:
+          - generic [ref=e42]:
+            - navigation [ref=e44]:
+              - link [ref=e45] [cursor=pointer]:
+                - /url: /admin
+                - generic "Dashboard" [ref=e46]:
+                  - img [ref=e47]
+              - generic [ref=e50]: /
+              - generic [ref=e52]:
+                - log [ref=e54]
+                - generic [ref=e55] [cursor=pointer]:
+                  - generic "Dashboard" [ref=e56]:
+                    - generic [ref=e57]:
+                      - generic [ref=e58]: Dashboard
+                      - combobox [ref=e59]
+                  - button [ref=e61]:
+                    - img [ref=e62]
+            - link "Account" [ref=e64] [cursor=pointer]:
+              - /url: /admin/account
+              - img "yas" [ref=e65]
+        - status [ref=e71]
+  - status [ref=e72]
+  - region "Notifications alt+T"
+  - alert [ref=e73]
