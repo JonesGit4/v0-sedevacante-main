@@ -21,10 +21,11 @@ export async function GET(request: Request) {
 
     if (action === "fix") {
       // Drop and recreate with correct Payload column names
+      // Payload uses varchar IDs for array rows (not serial)
       await db.execute(`DROP TABLE IF EXISTS "news_gallery"`)
       await db.execute(`
         CREATE TABLE "news_gallery" (
-          "id" serial PRIMARY KEY,
+          "id" varchar PRIMARY KEY NOT NULL,
           "_order" integer NOT NULL,
           "_parent_id" integer NOT NULL REFERENCES "news"("id") ON DELETE CASCADE,
           "caption" varchar,
