@@ -1,0 +1,123 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e34]:
+    - button "Open Menu" [ref=e36] [cursor=pointer]:
+      - generic "Open" [ref=e38]:
+        - img [ref=e39]
+    - generic [ref=e41]:
+      - complementary [ref=e42]:
+        - navigation [ref=e44]:
+          - generic [ref=e45]:
+            - button "Collections" [ref=e46] [cursor=pointer]:
+              - generic [ref=e47]: Collections
+              - img [ref=e49]
+            - generic [ref=e53]:
+              - link "Usuários" [ref=e54] [cursor=pointer]:
+                - /url: /admin/collections/users
+                - generic [ref=e55]: Usuários
+              - link "Artigos" [ref=e56] [cursor=pointer]:
+                - /url: /admin/collections/articles
+                - generic [ref=e57]: Artigos
+              - link "Notícias" [ref=e58] [cursor=pointer]:
+                - /url: /admin/collections/news
+                - generic [ref=e59]: Notícias
+              - generic [ref=e62]: Mídias
+          - link "Log out" [ref=e64] [cursor=pointer]:
+            - /url: /admin/logout
+            - img [ref=e65]
+      - generic [ref=e69]:
+        - banner [ref=e70]:
+          - generic [ref=e73]:
+            - navigation [ref=e75]:
+              - link [ref=e76] [cursor=pointer]:
+                - /url: /admin
+                - generic "Dashboard" [ref=e77]:
+                  - img [ref=e78]
+              - generic [ref=e81]: /
+              - generic [ref=e82]: Mídias
+            - link "Account" [ref=e83] [cursor=pointer]:
+              - /url: /admin/account
+              - img "yas" [ref=e84]
+        - generic [ref=e86]:
+          - banner [ref=e87]:
+            - generic [ref=e89]:
+              - heading "Mídias" [level=1] [ref=e90]
+              - generic [ref=e91]:
+                - link "Create new Mídia" [ref=e92] [cursor=pointer]:
+                  - /url: /admin/collections/media/create
+                  - generic:
+                    - generic: Create New
+                - button "Bulk Upload" [ref=e93] [cursor=pointer]:
+                  - generic:
+                    - generic: Bulk Upload
+          - generic [ref=e95]:
+            - img
+            - textbox "Search by File Name" [ref=e97]
+            - generic [ref=e98]:
+              - button "Columns" [ref=e99] [cursor=pointer]:
+                - generic [ref=e100]: Columns
+                - img [ref=e102]
+              - button "Filters" [ref=e104] [cursor=pointer]:
+                - generic [ref=e105]: Filters
+                - img [ref=e107]
+          - table [ref=e112]:
+            - rowgroup [ref=e113]:
+              - row "select-all File Name Sort by File Name Ascending Sort by File Name Descending Texto Alternativo Sort by Texto Alternativo Ascending Sort by Texto Alternativo Descending Updated At Sort by Updated At Ascending Sort by Updated At Descending Created At Sort by Created At Ascending Sort by Created At Descending" [ref=e114]:
+                - columnheader "select-all" [ref=e115]:
+                  - checkbox "select-all" [ref=e118]
+                - columnheader "File Name Sort by File Name Ascending Sort by File Name Descending" [ref=e119]:
+                  - generic [ref=e120]:
+                    - generic [ref=e121]: File Name
+                    - generic [ref=e122]:
+                      - button "Sort by File Name Ascending" [ref=e123] [cursor=pointer]:
+                        - img [ref=e124]
+                      - button "Sort by File Name Descending" [ref=e126] [cursor=pointer]:
+                        - img [ref=e127]
+                - columnheader "Texto Alternativo Sort by Texto Alternativo Ascending Sort by Texto Alternativo Descending" [ref=e129]:
+                  - generic [ref=e130]:
+                    - generic [ref=e131]: Texto Alternativo
+                    - generic [ref=e132]:
+                      - button "Sort by Texto Alternativo Ascending" [ref=e133] [cursor=pointer]:
+                        - img [ref=e134]
+                      - button "Sort by Texto Alternativo Descending" [ref=e136] [cursor=pointer]:
+                        - img [ref=e137]
+                - columnheader "Updated At Sort by Updated At Ascending Sort by Updated At Descending" [ref=e139]:
+                  - generic [ref=e140]:
+                    - generic [ref=e141]: Updated At
+                    - generic [ref=e142]:
+                      - button "Sort by Updated At Ascending" [ref=e143] [cursor=pointer]:
+                        - img [ref=e144]
+                      - button "Sort by Updated At Descending" [ref=e146] [cursor=pointer]:
+                        - img [ref=e147]
+                - columnheader "Created At Sort by Created At Ascending Sort by Created At Descending" [ref=e149]:
+                  - generic [ref=e150]:
+                    - generic [ref=e151]: Created At
+                    - generic [ref=e152]:
+                      - button "Sort by Created At Ascending" [ref=e153] [cursor=pointer]:
+                        - img [ref=e154]
+                      - button "Sort by Created At Descending" [ref=e156] [cursor=pointer]:
+                        - img [ref=e157]
+            - rowgroup [ref=e159]:
+              - row "Dom3.jpeg Dom3.jpeg Bispo March 26th 2026, 1:34 PM March 26th 2026, 1:34 PM" [ref=e160]:
+                - cell [ref=e161]:
+                  - checkbox [ref=e164]
+                - cell "Dom3.jpeg Dom3.jpeg" [ref=e165]:
+                  - link "Dom3.jpeg Dom3.jpeg" [ref=e166] [cursor=pointer]:
+                    - /url: /admin/collections/media/1
+                    - generic [ref=e167]:
+                      - img "Dom3.jpeg" [ref=e169]
+                      - generic [ref=e170]: Dom3.jpeg
+                - cell "Bispo" [ref=e171]:
+                  - generic [ref=e172]: Bispo
+                - cell "March 26th 2026, 1:34 PM" [ref=e173]:
+                  - generic [ref=e174]: March 26th 2026, 1:34 PM
+                - cell "March 26th 2026, 1:34 PM" [ref=e175]:
+                  - generic [ref=e176]: March 26th 2026, 1:34 PM
+          - generic [ref=e177]:
+            - generic [ref=e178]: 1-1 of 1
+            - 'button "Per Page: 10" [ref=e182] [cursor=pointer]':
+              - generic [ref=e183]:
+                - generic [ref=e184]: "Per Page: 10"
+                - img [ref=e185]
+  - status [ref=e33]
+  - region "Notifications alt+T"
+  - alert [ref=e2]: Mídias | Sedevacante Admin

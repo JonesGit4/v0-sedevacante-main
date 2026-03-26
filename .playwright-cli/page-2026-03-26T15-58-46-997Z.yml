@@ -1,0 +1,73 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e4]:
+    - button "Open Menu" [ref=e6] [cursor=pointer]:
+      - generic "Open" [ref=e8]:
+        - img [ref=e9]
+    - generic [ref=e11]:
+      - complementary [ref=e12]:
+        - navigation [ref=e14]:
+          - generic [ref=e15]:
+            - button "Collections" [ref=e16] [cursor=pointer]:
+              - generic [ref=e17]: Collections
+              - img [ref=e19]
+            - generic [ref=e23]:
+              - link "Usuários" [ref=e24] [cursor=pointer]:
+                - /url: /admin/collections/users
+                - generic [ref=e25]: Usuários
+              - link "Artigos" [ref=e26] [cursor=pointer]:
+                - /url: /admin/collections/articles
+                - generic [ref=e27]: Artigos
+              - link "Notícias" [ref=e28] [cursor=pointer]:
+                - /url: /admin/collections/news
+                - generic [ref=e29]: Notícias
+              - link "Mídias" [ref=e30] [cursor=pointer]:
+                - /url: /admin/collections/media
+                - generic [ref=e32]: Mídias
+          - link "Log out" [ref=e34] [cursor=pointer]:
+            - /url: /admin/logout
+            - img [ref=e35]
+      - generic [ref=e39]:
+        - banner [ref=e40]:
+          - generic [ref=e43]:
+            - navigation [ref=e45]:
+              - link [ref=e46] [cursor=pointer]:
+                - /url: /admin
+                - generic "Dashboard" [ref=e47]:
+                  - img [ref=e48]
+              - generic [ref=e51]: /
+              - link "Mídias" [ref=e52] [cursor=pointer]:
+                - /url: /admin/collections/media
+                - generic [ref=e53]: Mídias
+              - generic [ref=e54]: /
+              - generic [ref=e55]: Create New
+            - link "Account" [ref=e56] [cursor=pointer]:
+              - /url: /admin/account
+              - img "yas" [ref=e57]
+        - heading "[Untitled]" [level=1] [ref=e60]
+        - main [ref=e61]:
+          - generic [ref=e62]:
+            - generic [ref=e64]:
+              - list [ref=e66]:
+                - listitem [ref=e67]:
+                  - paragraph [ref=e68]: Creating new Mídia
+              - button "Save" [ref=e72] [cursor=pointer]:
+                - generic:
+                  - generic: Save
+            - generic [ref=e78]:
+              - generic [ref=e82]:
+                - generic [ref=e83]:
+                  - button "Select a file" [ref=e84] [cursor=pointer]:
+                    - generic:
+                      - generic: Select a file
+                  - generic [ref=e85]: Or
+                  - button "Paste URL" [ref=e86] [cursor=pointer]:
+                    - generic:
+                      - generic: Paste URL
+                - paragraph [ref=e87]: Or Drag and drop a file
+              - generic [ref=e89]:
+                - generic [ref=e90]: Texto Alternativo
+                - textbox "Texto Alternativo" [ref=e92]
+        - status [ref=e93]
+  - status [ref=e94]
+  - region "Notifications alt+T"
+  - alert [ref=e95]

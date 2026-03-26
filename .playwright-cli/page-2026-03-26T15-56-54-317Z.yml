@@ -1,0 +1,23 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - img [ref=e4]
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - generic [ref=e20]:
+            - text: Email
+            - generic [ref=e21]: "*"
+          - textbox "Email *" [ref=e23]
+        - generic [ref=e24]:
+          - generic [ref=e25]:
+            - text: Password
+            - generic [ref=e26]: "*"
+          - textbox "Password" [ref=e29]
+      - link "Forgot password?" [ref=e30] [cursor=pointer]:
+        - /url: /admin/forgot
+      - button "Login" [ref=e32] [cursor=pointer]:
+        - generic:
+          - generic: Login
+  - status [ref=e33]
+  - region "Notifications alt+T"
+  - alert [ref=e2]: Login | Sedevacante Admin
