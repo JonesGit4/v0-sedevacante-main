@@ -58,13 +58,12 @@ export async function GET(request: Request) {
         else if (filename.endsWith(".pdf")) mimeType = "application/pdf"
 
         try {
-          // Create media record via raw SQL since Payload create expects a file
           const db = (payload.db as any).drizzle
-          await db.execute({
-            sql: `INSERT INTO "media" ("filename", "mime_type", "filesize", "url", "alt", "prefix", "updated_at", "created_at")
-                  VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())`,
-            params: [filename, mimeType, blob.size, blob.url, filename.replace(/\.[^.]+$/, "").replace(/[_-]/g, " "), ""],
-          })
+          const alt = filename.replace(/\.[^.]+$/, "").replace(/[_-]/g, " ")
+          await db.execute(
+            `INSERT INTO "media" ("filename", "mime_type", "filesize", "url", "alt", "prefix", "updated_at", "created_at")
+             VALUES ('${filename}', '${mimeType}', ${blob.size}, '${blob.url}', '${alt}', '', NOW(), NOW())`
+          )
           synced.push(filename)
         } catch (e: any) {
           errors.push(`${filename}: ${e.message}`)
