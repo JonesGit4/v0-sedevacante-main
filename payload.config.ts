@@ -2,6 +2,9 @@ import { buildConfig } from "payload"
 import { postgresAdapter } from "@payloadcms/db-postgres"
 import { lexicalEditor } from "@payloadcms/richtext-lexical"
 import { seoPlugin } from "@payloadcms/plugin-seo"
+import { pt } from "@payloadcms/translations/languages/pt"
+import { en } from "@payloadcms/translations/languages/en"
+
 import sharp from "sharp"
 import path from "path"
 import { fileURLToPath } from "url"
@@ -14,6 +17,10 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  i18n: {
+    supportedLanguages: { pt, en },
+    fallbackLanguage: "pt",
+  },
   admin: {
     user: Users.slug,
     meta: {
@@ -40,6 +47,9 @@ export default buildConfig({
     seoPlugin({
       collections: ["articles"],
       uploadsCollection: "media",
+      generateTitle: ({ doc }: any) => doc?.title ? `${doc.title} | Sedevacante` : "Sedevacante",
+      generateDescription: ({ doc }: any) => doc?.excerpt || "",
+      generateURL: ({ doc }: any) => doc?.slug ? `https://sedevacante.com.br/articles/${doc.slug}` : "",
     }),
   ],
 })

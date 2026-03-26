@@ -1,5 +1,5 @@
 import type { CollectionConfig } from "payload"
-import { isAdminAccess } from "../lib/access"
+import { isAdmin } from "../lib/access"
 
 export const Users: CollectionConfig = {
   slug: "users",
@@ -9,18 +9,24 @@ export const Users: CollectionConfig = {
   },
   auth: true,
   admin: {
-    useAsTitle: "email",
+    useAsTitle: "name",
     defaultColumns: ["name", "email", "role"],
   },
   access: {
-    // Only admin can list/read other users
-    read: isAdminAccess,
-    // Only admin can create new users (after first user)
-    create: isAdminAccess,
-    // Only admin can update users
-    update: isAdminAccess,
-    // Only admin can delete users
-    delete: isAdminAccess,
+    // Admin vê todos; demais só veem a si mesmos
+    read: ({ req: { user } }) => {
+      if (!user) return false
+      if (isAdmin(user)) return true
+      return { id: { equals: user.id } }
+    },
+    create: ({ req: { user } }) => isAdmin(user),
+    update: ({ req: { user } }) => {
+      if (!user) return false
+      if (isAdmin(user)) return true
+      // Usuário pode editar o próprio perfil
+      return { id: { equals: user.id } }
+    },
+    delete: ({ req: { user } }) => isAdmin(user),
   },
   fields: [
     {
@@ -40,6 +46,10 @@ export const Users: CollectionConfig = {
         { label: "Editor — Publica artigos e gerencia mídia", value: "editor" },
         { label: "Autor — Cria rascunhos, não publica", value: "author" },
       ],
+      access: {
+        // Somente admin pode alterar o role
+        update: ({ req: { user } }) => isAdmin(user),
+      },
       admin: {
         position: "sidebar",
         description: "Define o que este usuário pode fazer no painel.",

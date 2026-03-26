@@ -1,6 +1,18 @@
 import type { CollectionConfig } from "payload"
 import { canCreate, isEditorOrSelf, isAdminDelete, canPublish } from "../lib/access"
 
+// Gera slug a partir do título
+function slugify(text: string): string {
+  return text
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // remove acentos
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+}
+
 export const Articles: CollectionConfig = {
   slug: "articles",
   labels: {
@@ -12,12 +24,10 @@ export const Articles: CollectionConfig = {
     defaultColumns: ["title", "language", "author", "status", "publishedAt"],
   },
   access: {
-    // Público pode ler artigos publicados; logado vê tudo conforme role
     read: ({ req: { user } }) => {
       if (!user) return { status: { equals: "published" } }
       const role = user?.role || "author"
       if (role === "admin" || role === "editor") return true
-      // Author só vê os próprios
       return { createdBy: { equals: user.id } }
     },
     create: canCreate,
@@ -25,15 +35,27 @@ export const Articles: CollectionConfig = {
     delete: isAdminDelete,
   },
   hooks: {
+    beforeValidate: [
+      ({ data, operation }) => {
+        // Auto-gerar slug a partir do título
+        if (data?.title && (!data.slug || data.slug === "")) {
+          data.slug = slugify(data.title)
+        }
+        return data
+      },
+    ],
     beforeChange: [
       ({ req, data, operation }) => {
-        // Registrar quem criou o artigo
+        // Registrar quem criou e preencher autor automaticamente
         if (operation === "create" && req.user) {
           data.createdBy = req.user.id
+          if (!data.author || data.author === "") {
+            data.author = (req.user as any).name || req.user.email
+          }
         }
         // Author não pode publicar — forçar draft
         if (req.user) {
-          const role = req.user.role || "author"
+          const role = (req.user as any).role || "author"
           if (role === "author" && data.status === "published") {
             data.status = "draft"
           }
@@ -52,11 +74,11 @@ export const Articles: CollectionConfig = {
     {
       name: "slug",
       type: "text",
-      required: true,
       unique: true,
       label: "Slug (URL)",
       admin: {
         position: "sidebar",
+        description: "Gerado automaticamente a partir do título. Editável.",
       },
     },
     {
@@ -79,12 +101,18 @@ export const Articles: CollectionConfig = {
       name: "author",
       type: "text",
       label: "Autor",
+      admin: {
+        description: "Preenchido automaticamente com seu nome. Editável.",
+      },
     },
     {
       name: "excerpt",
       type: "textarea",
-      label: "Resumo",
+      label: "Resumo / Descrição",
       maxLength: 300,
+      admin: {
+        description: "Usado também como descrição SEO se não houver override.",
+      },
     },
     {
       name: "featuredImage",
@@ -100,14 +128,12 @@ export const Articles: CollectionConfig = {
     },
     {
       name: "tags",
-      type: "array",
+      type: "text",
+      hasMany: true,
       label: "Tags",
-      fields: [
-        {
-          name: "tag",
-          type: "text",
-        },
-      ],
+      admin: {
+        description: "Digite e pressione Enter. Cole múltiplas separadas por vírgula.",
+      },
     },
     {
       name: "status",
@@ -120,7 +146,6 @@ export const Articles: CollectionConfig = {
         { label: "Publicado", value: "published" },
       ],
       access: {
-        // Author vê o campo mas não pode alterar
         update: canPublish,
       },
       admin: {
