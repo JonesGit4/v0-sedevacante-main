@@ -413,11 +413,12 @@ export function PostsSlider() {
       </div>
 
       <div className="flex justify-center mt-8 px-4">
-        <button
+        <a
+          href="/articles"
           className="px-8 py-3 border border-primary text-primary hover:bg-primary/10 font-serif font-semibold rounded transition-colors"
         >
           {t.seeAll}
-        </button>
+        </a>
       </div>
     </section>
   )
