@@ -11,6 +11,7 @@ import path from "path"
 import { fileURLToPath } from "url"
 
 import { Articles } from "./collections/Articles"
+import { News } from "./collections/News"
 import { Media } from "./collections/Media"
 import { Users } from "./collections/Users"
 
@@ -31,7 +32,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Articles, Media],
+  collections: [Users, Articles, News, Media],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "sdv-payload-secret-2026-sssj-sede-vac",
   db: postgresAdapter({
