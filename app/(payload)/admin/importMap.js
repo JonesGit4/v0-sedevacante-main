@@ -27,6 +27,7 @@ import { UnorderedListFeatureClient as c25 } from '@payloadcms/richtext-lexical/
 import { UploadFeatureClient as c26 } from '@payloadcms/richtext-lexical/client'
 import { RscEntryLexicalCell as c27 } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as c28 } from '@payloadcms/richtext-lexical/rsc'
+import { VercelBlobClientUploadHandler as c29 } from '@payloadcms/storage-vercel-blob/client'
 
 export const importMap = {
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": c0,
@@ -58,4 +59,5 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UploadFeatureClient": c26,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": c27,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": c28,
+  "@payloadcms/storage-vercel-blob/client#VercelBlobClientUploadHandler": c29,
 }
