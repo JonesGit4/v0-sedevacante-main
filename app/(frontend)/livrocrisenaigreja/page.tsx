@@ -430,7 +430,7 @@ function AuthorSection() {
 /* --- SECTION: Palavra do Bispo --- */
 function BishopSection() {
   const [activePhoto, setActivePhoto] = useState(0)
-  const bishopPhotos = ["/images/livro/dom-rodrigo.png", "/images/livro/dom-rodrigo-2.jpeg"]
+  const bishopPhotos = ["/images/livro/dom-rodrigo.png", "/images/livro/dom-rodrigo-2.jpeg", "/images/livro/dom-rodrigo-3.png"]
 
   useEffect(() => {
     const interval = setInterval(() => {
