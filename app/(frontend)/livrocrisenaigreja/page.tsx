@@ -271,13 +271,13 @@ function FreeSampleSection() {
     <section id="amostra" className="py-8 sm:py-10 lg:py-16 bg-[#100E0C]">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center gap-10 lg:gap-16">
+          <div className="flex flex-col md:flex-row items-center gap-6 lg:gap-12">
             {/* Book Image Left */}
             <div className="flex-shrink-0 hidden md:block">
               <img
                 src="/images/livro/livro-perspec2.png"
                 alt="A Crise de Autoridade na Igreja — Livro"
-                className="w-[280px] lg:w-[340px] drop-shadow-[0_16px_32px_rgba(0,0,0,0.5)]"
+                className="w-[240px] lg:w-[300px] drop-shadow-[0_16px_32px_rgba(0,0,0,0.5)]"
               />
             </div>
 
