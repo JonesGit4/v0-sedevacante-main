@@ -30,21 +30,21 @@ export default function AmostraGratisPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0C0A09] flex items-center justify-center px-4 py-20">
+    <div className="min-h-screen bg-[#0C0A09] flex items-start sm:items-center justify-center px-4 pt-24 pb-10 sm:py-20">
       <div className="max-w-lg w-full">
         {/* Book cover */}
         <div className="flex justify-center mb-4">
           <Image
             src="/images/livro/livro-perspec2.png"
             alt="A Crise de Autoridade na Igreja"
-            width={180}
-            height={260}
-            className="drop-shadow-[0_16px_32px_rgba(0,0,0,0.5)]"
+            width={220}
+            height={320}
+            className="w-[160px] sm:w-[220px] drop-shadow-[0_16px_32px_rgba(0,0,0,0.5)]"
           />
         </div>
 
         {/* Card */}
-        <div className="rounded-2xl bg-gradient-to-br from-[rgba(201,168,76,0.08)] to-[rgba(201,168,76,0.02)] border border-[rgba(201,168,76,0.15)] p-8 sm:p-10 text-center">
+        <div className="rounded-2xl bg-gradient-to-br from-[rgba(201,168,76,0.08)] to-[rgba(201,168,76,0.02)] border border-[rgba(201,168,76,0.15)] p-6 sm:p-10 text-center">
           <h1 className="font-cinzel-decorative text-2xl sm:text-3xl font-bold mb-3" style={{ color: "#C9A84C" }}>
             Amostra Grátis
           </h1>
