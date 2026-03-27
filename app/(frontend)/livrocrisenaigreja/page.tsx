@@ -1224,7 +1224,7 @@ function PurchaseSection() {
 /* --- SECTION: Donation --- */
 function DonationSection() {
   const [step, setStep] = useState<DonationStep>("form")
-  const [form, setForm] = useState({ name: "", email: "", amount: "" })
+  const [form, setForm] = useState({ name: "", email: "", amount: "", observation: "" })
   const [pixData, setPixData] = useState<{
     brCode: string
     qrCodeImage: string
@@ -1271,6 +1271,7 @@ function DonationSection() {
           name: form.name,
           email: form.email,
           amount: amountNum,
+          observation: form.observation,
         }),
       })
 
@@ -1354,6 +1355,20 @@ function DonationSection() {
                   placeholder="50,00"
                 />
               </div>
+              <div>
+                <label className="block text-sm font-medium text-[#D4C8B8] mb-1.5">
+                  Observação <span className="text-[#8A8078] font-normal">(opcional)</span>
+                </label>
+                <textarea
+                  maxLength={200}
+                  value={form.observation}
+                  onChange={(e) => setForm({ ...form, observation: e.target.value })}
+                  className="livro-dark-input w-full px-4 py-3 rounded-xl text-sm resize-none"
+                  placeholder="Deixe uma mensagem (máx. 200 caracteres)"
+                  rows={3}
+                />
+                <p className="text-xs text-[#6A6058] mt-1 text-right">{form.observation.length}/200</p>
+              </div>
               <button
                 type="submit"
                 className="gold-glow w-full py-3 rounded-xl text-sm font-bold flex items-center justify-center gap-2"
@@ -1392,7 +1407,7 @@ function DonationSection() {
                       setStep("form")
                       setPixData(null)
                       setPaymentConfirmed(false)
-                      setForm({ name: "", email: "", amount: "" })
+                      setForm({ name: "", email: "", amount: "", observation: "" })
                       setShowForm(false)
                     }}
                     className="w-full py-3 rounded-xl text-sm text-[#8A8078] border border-[rgba(201,168,76,0.08)] hover:text-[#D4C8B8] transition-colors mt-2"
@@ -1452,7 +1467,7 @@ function DonationSection() {
                   setStep("form")
                   setPixData(null)
                   setPaymentConfirmed(false)
-                  setForm({ name: "", email: "", amount: "" })
+                  setForm({ name: "", email: "", amount: "", observation: "" })
                   setShowForm(false)
                 }}
                 className="w-full py-3 rounded-xl text-sm text-[#8A8078] border border-[rgba(201,168,76,0.08)] hover:text-[#D4C8B8] transition-colors"
@@ -1474,7 +1489,7 @@ function DonationSection() {
               <button
                 onClick={() => {
                   setStep("form")
-                  setForm({ name: "", email: "", amount: "" })
+                  setForm({ name: "", email: "", amount: "", observation: "" })
                   setShowForm(false)
                 }}
                 className="text-sm text-[#8A8078] hover:text-[#D4C8B8] transition-colors"

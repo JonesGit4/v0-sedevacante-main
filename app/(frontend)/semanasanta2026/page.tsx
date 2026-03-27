@@ -705,6 +705,188 @@ function RegistrationSection() {
   )
 }
 
+/* --- SECTION: Donation (Footer) --- */
+type SSDonationStep = "form" | "processing" | "pix" | "done"
+
+function SSDonationSection() {
+  const [step, setStep] = useState<SSDonationStep>("form")
+  const [form, setForm] = useState({ name: "", email: "", amount: "", observation: "" })
+  const [pixData, setPixData] = useState<{ brCode: string; qrCodeImage: string; correlationID: string } | null>(null)
+  const [error, setError] = useState("")
+  const [copied, setCopied] = useState(false)
+  const [showForm, setShowForm] = useState(false)
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false)
+
+  useEffect(() => {
+    if (step !== "pix" || !pixData?.correlationID || paymentConfirmed) return
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/pix-status?id=${pixData.correlationID}`)
+        const data = await res.json()
+        if (data.status === "COMPLETED") { setPaymentConfirmed(true); clearInterval(interval) }
+      } catch { /* silent */ }
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [step, pixData?.correlationID, paymentConfirmed])
+
+  function resetForm() {
+    setStep("form"); setPixData(null); setPaymentConfirmed(false)
+    setForm({ name: "", email: "", amount: "", observation: "" }); setShowForm(false)
+  }
+
+  async function handleDonate(e: FormEvent) {
+    e.preventDefault(); setError("")
+    const amountNum = Number.parseFloat(form.amount.replace(",", "."))
+    if (!amountNum || amountNum < 1) { setError("Valor mínimo de R$1,00"); return }
+    setStep("processing")
+    try {
+      const res = await fetch("/api/pix-donation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: form.name, email: form.email, amount: amountNum, observation: form.observation }),
+      })
+      if (!res.ok) throw new Error("Erro ao gerar doação PIX")
+      const data = await res.json().catch(() => ({}))
+      if (data?.brCode && data?.qrCodeImage) {
+        setPixData({ brCode: data.brCode, qrCodeImage: data.qrCodeImage, correlationID: data.correlationID || "" })
+        setStep("pix")
+      } else { setStep("done") }
+    } catch { setError("Erro ao gerar doação. Tente novamente."); setStep("form") }
+  }
+
+  const gold = "#C9A84C"
+
+  return (
+    <section id="doacao" className="py-8 sm:py-10 lg:py-16 border-t border-[#2E2821]">
+      <div className="container mx-auto px-4 lg:px-8">
+        <div className="max-w-xl mx-auto text-center">
+          <span className="text-gold text-3xl block mb-4">✝</span>
+          <h2 className="text-2xl sm:text-3xl font-bold text-gold mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
+            Apoie a Semana Santa
+          </h2>
+          <p className="text-[#9C8E7C] text-base mb-8 leading-relaxed">
+            Contribua para a realização das cerimônias da Semana Santa 2026. Sua doação ajuda a manter a Tradição Católica viva.
+          </p>
+
+          {!showForm && step === "form" && (
+            <button onClick={() => setShowForm(true)}
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-green-600 hover:bg-green-700 text-white font-bold transition-all shadow-lg shadow-green-900/30">
+              ✝ Apoie a Semana Santa
+            </button>
+          )}
+
+          {showForm && step === "form" && (
+            <form onSubmit={handleDonate} className="text-left space-y-4 mt-6 rounded-2xl bg-[#1A1714]/80 border border-gold/10 p-6">
+              {error && <div className="p-3 rounded-lg bg-red-900/20 border border-red-800/30 text-red-300 text-sm">{error}</div>}
+              <div>
+                <label className="block text-sm font-medium text-[#D4C5B0] mb-1.5">Nome</label>
+                <input type="text" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl text-sm bg-[#0C0A09] border border-[#2E2821] text-[#F5F0E8] placeholder-[#6A6058] focus:border-gold/40 focus:outline-none"
+                  placeholder="Seu nome" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#D4C5B0] mb-1.5">E-mail</label>
+                <input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl text-sm bg-[#0C0A09] border border-[#2E2821] text-[#F5F0E8] placeholder-[#6A6058] focus:border-gold/40 focus:outline-none"
+                  placeholder="seu@email.com" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#D4C5B0] mb-1.5">Valor da Doação (R$)</label>
+                <input type="text" required value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl text-sm bg-[#0C0A09] border border-[#2E2821] text-[#F5F0E8] placeholder-[#6A6058] focus:border-gold/40 focus:outline-none"
+                  placeholder="50,00" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#D4C5B0] mb-1.5">
+                  Observação <span className="text-[#6A6058] font-normal">(opcional)</span>
+                </label>
+                <textarea maxLength={200} value={form.observation} onChange={(e) => setForm({ ...form, observation: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl text-sm bg-[#0C0A09] border border-[#2E2821] text-[#F5F0E8] placeholder-[#6A6058] focus:border-gold/40 focus:outline-none resize-none"
+                  placeholder="Deixe uma mensagem (máx. 200 caracteres)" rows={3} />
+                <p className="text-xs text-[#6A6058] mt-1 text-right">{form.observation.length}/200</p>
+              </div>
+              <button type="submit"
+                className="w-full py-3 rounded-xl text-sm font-bold bg-gold hover:bg-gold-light text-[#0C0A09] transition-all flex items-center justify-center gap-2">
+                ✝ Doar via PIX
+              </button>
+            </form>
+          )}
+
+          {step === "processing" && (
+            <div className="flex flex-col items-center justify-center py-12 gap-4 mt-6">
+              <div className="w-9 h-9 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+              <p className="text-[#D4C5B0] font-medium">Gerando doação PIX...</p>
+            </div>
+          )}
+
+          {step === "pix" && pixData && (
+            <div className="mt-6 space-y-6 rounded-2xl bg-[#1A1714]/80 border border-gold/10 p-6">
+              {paymentConfirmed ? (
+                <div className="flex flex-col items-center justify-center py-6 gap-4 text-center">
+                  <div className="text-green-400 text-4xl">✓</div>
+                  <h3 className="text-xl font-bold text-green-400" style={{ fontFamily: "'Playfair Display', serif" }}>
+                    Doação Confirmada!
+                  </h3>
+                  <p className="text-sm text-[#D4C5B0] max-w-xs">
+                    Obrigado, {form.name.split(" ")[0]}! Sua doação de R${form.amount.replace(".", ",")} foi recebida.
+                  </p>
+                  <p className="text-xs text-[#9C8E7C]">Que Deus abençoe sua generosidade.</p>
+                  <button onClick={resetForm}
+                    className="w-full py-3 rounded-xl text-sm text-[#9C8E7C] border border-gold/10 hover:text-[#F5F0E8] transition-colors mt-2">
+                    Fechar
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="text-center">
+                    <div className="inline-flex items-center gap-2 bg-gold/10 text-gold px-4 py-2 rounded-full text-sm font-medium mb-2">
+                      ⏳ Aguardando pagamento
+                    </div>
+                  </div>
+                  {pixData.qrCodeImage && (
+                    <div className="flex justify-center">
+                      <div className="bg-white p-4 rounded-xl">
+                        <img src={pixData.qrCodeImage} alt="QR Code PIX Doação" className="w-40 h-40" />
+                      </div>
+                    </div>
+                  )}
+                  {pixData.brCode && (
+                    <div className="text-left">
+                      <label className="block text-sm font-medium text-[#D4C5B0] mb-1.5">Código PIX:</label>
+                      <div className="flex items-center gap-2">
+                        <input type="text" readOnly value={pixData.brCode}
+                          className="flex-1 px-4 py-3 rounded-xl text-xs font-mono bg-[#0C0A09] border border-[#2E2821] text-[#F5F0E8]" />
+                        <button onClick={() => { navigator.clipboard.writeText(pixData.brCode); setCopied(true); setTimeout(() => setCopied(false), 2000) }}
+                          className="flex-shrink-0 p-3 rounded-xl bg-gold/10 border border-gold/20 text-gold">
+                          {copied ? "✓" : "⎘"}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  <p className="text-xs text-center text-[#9C8E7C]">A confirmação aparecerá automaticamente após o pagamento</p>
+                  <button onClick={resetForm}
+                    className="w-full py-3 rounded-xl text-sm text-[#9C8E7C] border border-gold/10 hover:text-[#F5F0E8] transition-colors">
+                    Fechar
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+
+          {step === "done" && (
+            <div className="mt-6 flex flex-col items-center gap-4 py-8">
+              <div className="text-gold text-4xl">✓</div>
+              <p className="text-[#D4C5B0] font-medium">Doação registrada!</p>
+              <p className="text-[#9C8E7C] text-sm">Obrigado pelo apoio à Semana Santa.</p>
+              <button onClick={resetForm} className="text-sm text-[#9C8E7C] hover:text-[#F5F0E8] transition-colors">Fechar</button>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function SSFooter() {
   return (
     <footer className="py-12 border-t border-[#2E2821]">
@@ -741,6 +923,8 @@ export default function SemanaSanta2026Page() {
       <ScheduleSection />
       <LocationSection />
       <RegistrationSection />
+      {/* Hospedagem e Valores ocultos temporariamente — manter no código */}
+      {false && (
       <div className="relative">
         <div className="absolute inset-0 backdrop-blur-sm bg-[#0C0A09]/40 z-20 rounded-lg pointer-events-none" style={{ filter: "blur(0px)" }} />
         <div style={{ filter: "blur(6px)", opacity: 0.6, pointerEvents: "none" }}>
@@ -748,6 +932,8 @@ export default function SemanaSanta2026Page() {
           <ValoresSection />
         </div>
       </div>
+      )}
+      <SSDonationSection />
       <SSFooter />
     </div>
   )

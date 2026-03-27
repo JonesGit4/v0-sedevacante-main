@@ -6,7 +6,7 @@ const OPENPIX_KEY = "Q2xpZW50X0lkXzU3ZmVkNmYyLTkwOGYtNDliZi1hODgyLTY5YzcyNmJhMjU
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { name, email, amount } = body
+    const { name, email, amount, observation } = body
 
     if (!name || !email || !amount) {
       return NextResponse.json({ error: "Campos obrigatórios ausentes" }, { status: 400 })
@@ -14,11 +14,12 @@ export async function POST(req: NextRequest) {
 
     const valueCents = Math.round(amount * 100)
     const correlationID = `donation-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
+    const obs = observation ? ` - Obs: ${String(observation).slice(0, 200)}` : ""
 
     const payload = {
       correlationID,
       value: valueCents,
-      comment: `Doacao Seminario Sao Jose - ${name} - ${email}`,
+      comment: `Doacao Seminario Sao Jose - ${name} - ${email}${obs}`,
     }
 
     const res = await fetch(OPENPIX_API, {
