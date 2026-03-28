@@ -168,10 +168,10 @@ function HeroSection() {
                 <ChevronRight size={18} />
               </a>
               <div className="text-sm text-[#8A8078]">
-                <span className="text-[#C9A84C] font-bold text-lg">R$89,90</span>
-                <span className="ml-1">no 1º Lote</span>
-                <span className="block text-xs mt-0.5">25% de desconto · Unidades limitadas</span>
-                <span className="block text-xs mt-0.5 text-green-500 font-semibold">Frete grátis</span>
+                <span className="text-[#C9A84C] font-bold text-lg">R$99,90</span>
+                <span className="ml-1">no 2º Lote</span>
+                <span className="block text-xs mt-0.5">16% de desconto · Unidades limitadas</span>
+                <span className="block text-xs mt-0.5 text-[#8A8078]">+frete</span>
               </div>
             </div>
           </div>
@@ -1076,7 +1076,7 @@ function PurchaseSection() {
                 </button>
 
                 <p className="text-xs text-center text-[#6A6058]">
-                  Pagamento seguro via PIX. <span className="text-green-400">✓ Frete grátis no 1º Lote.</span>
+                  Pagamento seguro via PIX. <span className="text-[#C9A84C]">2º Lote · +frete</span>
                 </p>
               </form>
             )}
