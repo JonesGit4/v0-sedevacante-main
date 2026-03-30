@@ -184,12 +184,15 @@ export const Articles: CollectionConfig = {
     {
       name: "publishedAt",
       type: "date",
+      unique: true,
       label: "Data de Publicação",
       admin: {
         position: "sidebar",
         date: {
-          pickerAppearance: "dayOnly",
+          pickerAppearance: "dayAndTime",
+          displayFormat: "dd/MM/yyyy HH:mm:ss",
         },
+        description: "Data e hora completa (única por artigo).",
       },
     },
     {
