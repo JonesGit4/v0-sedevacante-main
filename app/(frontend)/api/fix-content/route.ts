@@ -24,21 +24,22 @@ function parseInline(text: string): any[] {
 
     // Check for ** (bold) — may contain *italic* inside
     if (text[i] === "*" && text[i + 1] === "*" && text[i + 2] !== "*") {
-      // Find the closing ** (could be *** if italic is nested at end)
-      let depth = 0
       let end = -1
       for (let j = i + 2; j < text.length - 1; j++) {
         if (text[j] === "*" && text[j + 1] === "*") {
-          end = j
+          // If *** (italic-close + bold-close), the ** is the last two
+          if (j + 2 < text.length && text[j + 2] === "*") {
+            end = j + 1 // include the italic-closing * in inner text
+          } else {
+            end = j
+          }
           break
         }
       }
       if (end !== -1) {
         const inner = text.slice(i + 2, end)
-        // Parse inner for *italic* segments
         const innerNodes = parseItalicInBold(inner)
         nodes.push(...innerNodes)
-        // Skip past closing ** (could be *** if next char is also *)
         i = end + 2
         continue
       }
