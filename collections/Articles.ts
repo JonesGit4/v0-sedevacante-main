@@ -142,6 +142,28 @@ export const Articles: CollectionConfig = {
       ],
     },
     {
+      name: "pinned",
+      type: "checkbox",
+      defaultValue: false,
+      label: "Fixar no Destaque",
+      admin: {
+        position: "sidebar",
+        description: "Fixa este artigo na seção de destaque da página de artigos (máx. 2).",
+      },
+    },
+    {
+      name: "pinnedOrder",
+      type: "number",
+      label: "Ordem do Destaque",
+      min: 1,
+      max: 2,
+      admin: {
+        position: "sidebar",
+        description: "1 = esquerda, 2 = direita. Apenas para artigos fixados.",
+        condition: (data) => data?.pinned === true,
+      },
+    },
+    {
       name: "status",
       type: "select",
       required: true,
