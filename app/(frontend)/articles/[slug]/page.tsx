@@ -107,42 +107,29 @@ export default async function ArticlePage({ params }: Props) {
 
   try {
     const payload = await getPayload({ config })
-    const result = await payload.find({
+
+    // Busca todos os artigos publicados ordenados por data (mais recente primeiro)
+    const allResult = await payload.find({
       collection: "articles",
-      where: { slug: { equals: slug }, status: { equals: "published" } },
-      limit: 1,
+      where: { status: { equals: "published" } },
+      sort: "-publishedAt",
+      limit: 200,
       depth: 1,
     })
-    article = result.docs[0]
+    const allArticles = allResult.docs
 
-    if (article?.publishedAt) {
-      // Artigo mais recente (próximo)
-      const newerResult = await payload.find({
-        collection: "articles",
-        where: {
-          status: { equals: "published" },
-          publishedAt: { greater_than: article.publishedAt },
-          slug: { not_equals: slug },
-        },
-        sort: "publishedAt",
-        limit: 1,
-        depth: 0,
-      })
-      nextArticle = newerResult.docs[0] || null
-
-      // Artigo mais antigo (anterior)
-      const olderResult = await payload.find({
-        collection: "articles",
-        where: {
-          status: { equals: "published" },
-          publishedAt: { less_than: article.publishedAt },
-          slug: { not_equals: slug },
-        },
-        sort: "-publishedAt",
-        limit: 1,
-        depth: 0,
-      })
-      prevArticle = olderResult.docs[0] || null
+    // Encontra o artigo atual e seus vizinhos pela posição na lista
+    const currentIndex = allArticles.findIndex((a: any) => a.slug === slug)
+    if (currentIndex !== -1) {
+      article = allArticles[currentIndex]
+      // Anterior = próximo na lista (mais antigo, index + 1)
+      if (currentIndex < allArticles.length - 1) {
+        prevArticle = allArticles[currentIndex + 1]
+      }
+      // Próximo = anterior na lista (mais recente, index - 1)
+      if (currentIndex > 0) {
+        nextArticle = allArticles[currentIndex - 1]
+      }
     }
   } catch (e) {
     console.error("Error fetching article:", e)
@@ -220,28 +207,27 @@ export default async function ArticlePage({ params }: Props) {
 
         {/* Navigation footer */}
         <nav className="mt-12 pt-8 border-t border-border">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-start">
-            {/* Previous article */}
-            <div className="text-left">
-              {prevArticle ? (
-                <Link
-                  href={`/articles/${prevArticle.slug}`}
-                  className="group inline-flex flex-col gap-1"
-                >
-                  <span className="text-xs text-muted-foreground font-serif uppercase tracking-wider">
-                    ← Anterior
-                  </span>
-                  <span className="text-sm font-sans font-medium text-foreground group-hover:text-primary transition-colors line-clamp-2">
-                    {prevArticle.title}
-                  </span>
-                </Link>
-              ) : (
-                <span />
-              )}
-            </div>
+          <div className="flex items-start justify-between gap-4">
+            {/* Previous article (older) */}
+            {prevArticle && (
+              <Link
+                href={`/articles/${prevArticle.slug}`}
+                className="group flex flex-col gap-1 max-w-[40%]"
+              >
+                <span className="text-xs text-muted-foreground font-serif uppercase tracking-wider">
+                  ← Anterior
+                </span>
+                <span className="text-sm font-sans font-medium text-foreground group-hover:text-primary transition-colors line-clamp-2">
+                  {prevArticle.title}
+                </span>
+              </Link>
+            )}
+
+            {/* Spacer to push "Todos os Artigos" to center */}
+            {!prevArticle && <div />}
 
             {/* All articles */}
-            <div className="text-center">
+            <div className="flex-shrink-0 text-center">
               <Link
                 href="/articles"
                 className="inline-flex items-center gap-2 px-4 py-2 text-sm font-serif text-muted-foreground hover:text-foreground transition-colors border border-border rounded-lg hover:bg-secondary/50"
@@ -250,24 +236,22 @@ export default async function ArticlePage({ params }: Props) {
               </Link>
             </div>
 
-            {/* Next article */}
-            <div className="text-right">
-              {nextArticle ? (
-                <Link
-                  href={`/articles/${nextArticle.slug}`}
-                  className="group inline-flex flex-col gap-1 items-end"
-                >
-                  <span className="text-xs text-muted-foreground font-serif uppercase tracking-wider">
-                    Próximo →
-                  </span>
-                  <span className="text-sm font-sans font-medium text-foreground group-hover:text-primary transition-colors line-clamp-2 text-right">
-                    {nextArticle.title}
-                  </span>
-                </Link>
-              ) : (
-                <span />
-              )}
-            </div>
+            {/* Next article (newer) */}
+            {nextArticle && (
+              <Link
+                href={`/articles/${nextArticle.slug}`}
+                className="group flex flex-col gap-1 items-end max-w-[40%]"
+              >
+                <span className="text-xs text-muted-foreground font-serif uppercase tracking-wider">
+                  Próximo →
+                </span>
+                <span className="text-sm font-sans font-medium text-foreground group-hover:text-primary transition-colors line-clamp-2 text-right">
+                  {nextArticle.title}
+                </span>
+              </Link>
+            )}
+
+            {!nextArticle && <div />}
           </div>
         </nav>
       </article>
