@@ -27,13 +27,33 @@ function lexical(paragraphs: string[]) {
 export async function GET() {
   try {
     const payload = await getPayload({ config })
+    const db = (payload.db as any).drizzle
     const results: string[] = []
 
-    // 1. Create "Where Peter Is" article in CMS with slug matching the hardcoded page
+    // Step 1: Add missing columns via SQL if they don't exist
+    const cols = await db.execute(
+      `SELECT column_name FROM information_schema.columns WHERE table_name = 'articles' AND column_name IN ('pinned', 'pinned_order')`
+    )
+    const existingCols = new Set(cols.rows.map((r: any) => r.column_name))
+
+    if (!existingCols.has("pinned")) {
+      await db.execute(`ALTER TABLE "articles" ADD COLUMN "pinned" boolean DEFAULT false`)
+      results.push("Added column: pinned")
+    }
+    if (!existingCols.has("pinned_order")) {
+      await db.execute(`ALTER TABLE "articles" ADD COLUMN "pinned_order" numeric`)
+      results.push("Added column: pinned_order")
+    }
+    if (results.length === 0) {
+      results.push("Columns already exist")
+    }
+
+    // Step 2: Create "Where Peter Is" article in CMS
     const existing = await payload.find({
       collection: "articles",
       where: { slug: { equals: "where-peter-is" } },
       limit: 1,
+      overrideAccess: true,
     })
 
     let wherePeterId: number | string
@@ -64,7 +84,7 @@ export async function GET() {
       results.push(`Created Where Peter Is (id=${wherePeterId})`)
     }
 
-    // 2. Pin "Where Peter Is" as featured #1
+    // Step 3: Pin Where Peter Is as #1
     await payload.update({
       collection: "articles",
       id: wherePeterId,
@@ -73,8 +93,7 @@ export async function GET() {
     })
     results.push(`Pinned Where Peter Is as #1`)
 
-    // 3. Pin most recent article as featured #2
-    // (O Concílio Vaticano II — id 3, the most recent by date)
+    // Step 4: Pin most recent article as #2
     const mostRecent = await payload.find({
       collection: "articles",
       where: {
@@ -83,6 +102,7 @@ export async function GET() {
       },
       sort: "-publishedAt",
       limit: 1,
+      overrideAccess: true,
     })
 
     if (mostRecent.docs.length > 0) {
