@@ -91,7 +91,7 @@ function FeaturedCard({ article }: { article: any }) {
     <Link href={`/articles/${article.slug}`} className="block group">
       <article className="border border-border rounded-xl overflow-hidden bg-card hover:shadow-xl transition-shadow h-full flex flex-col">
         {/* Image area */}
-        <div className="relative aspect-[16/9] overflow-hidden bg-secondary/30">
+        <div className="relative aspect-[4/3] overflow-hidden bg-secondary/30">
           {article.featuredImage?.url ? (
             <Image
               src={article.featuredImage.url}
