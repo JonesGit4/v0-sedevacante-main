@@ -13,16 +13,21 @@ export async function GET() {
     await db.execute(`DELETE FROM "banners_location"`)
     await db.execute(`DELETE FROM "banners"`)
 
-    // Usar media existente (já uploadada nas tentativas anteriores)
-    // Buscar a mais recente com nome de banner
+    // Buscar media do banner (já uploadada anteriormente)
     const mediaResult = await db.execute(
-      `SELECT id FROM "media" WHERE "filename" LIKE '%banner-livro%' ORDER BY id DESC LIMIT 1`
+      `SELECT id, filename, alt FROM "media" ORDER BY id DESC LIMIT 10`
     )
-    const mediaId = mediaResult.rows[0]?.id
 
-    if (!mediaId) {
-      return NextResponse.json({ error: "No banner media found. Upload manually via admin." })
+    // Encontrar o banner image
+    const bannerMedia = mediaResult.rows.find((r: any) =>
+      r.alt?.includes('Crise') || r.filename?.includes('banner')
+    )
+
+    if (!bannerMedia) {
+      return NextResponse.json({ error: "No banner media found", recentMedia: mediaResult.rows })
     }
+
+    const mediaId = bannerMedia.id
 
     // Insert banner
     const r = await db.execute(
