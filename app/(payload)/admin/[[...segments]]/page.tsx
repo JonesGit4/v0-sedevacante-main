@@ -25,6 +25,15 @@ const Page = async ({ params, searchParams }: Args) => {
     const result = await RootPage({ config, params, searchParams, importMap })
     return result
   } catch (error: any) {
+    // Re-throw Next.js internal errors (redirect, notFound)
+    if (
+      error?.digest?.startsWith("NEXT_REDIRECT") ||
+      error?.digest?.startsWith("NEXT_NOT_FOUND") ||
+      error?.message === "NEXT_REDIRECT" ||
+      error?.message === "NEXT_NOT_FOUND"
+    ) {
+      throw error
+    }
     console.error("[PAYLOAD ADMIN ERROR]", error?.message, error?.stack)
     return (
       <div style={{ padding: 40, fontFamily: "monospace" }}>
