@@ -61,8 +61,12 @@ export function SiteNavbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-black/90 backdrop-blur-md shadow-lg py-3"
-          : "bg-transparent py-5"
+          ? isHome
+            ? "bg-black/90 backdrop-blur-md shadow-lg py-3"
+            : "bg-[#5C0A1A] backdrop-blur-md shadow-lg py-3"
+          : isHome
+            ? "bg-transparent py-5"
+            : "bg-[#5C0A1A] py-5"
       }`}
     >
       <div className="container mx-auto px-4 lg:px-8 flex items-center justify-between">
