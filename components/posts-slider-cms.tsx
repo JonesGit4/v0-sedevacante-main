@@ -47,7 +47,7 @@ export function PostsSliderCMS({ articles }: { articles: Article[] }) {
                       src={mainArticle.featuredImage.url}
                       alt={mainArticle.featuredImage.alt || mainArticle.title}
                       fill
-                      className="object-cover"
+                      className="object-cover object-top"
                     />
                   </div>
                 )}
@@ -90,7 +90,7 @@ export function PostsSliderCMS({ articles }: { articles: Article[] }) {
                           src={article.featuredImage.url}
                           alt={article.featuredImage.alt || article.title}
                           fill
-                          className="object-cover"
+                          className="object-cover object-top"
                         />
                       </div>
                     )}

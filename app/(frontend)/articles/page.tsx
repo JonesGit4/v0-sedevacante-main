@@ -97,7 +97,7 @@ function FeaturedCard({ article }: { article: any }) {
               src={article.featuredImage.url}
               alt={article.featuredImage.alt || article.title}
               fill
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
@@ -151,7 +151,7 @@ function SmallCard({ article }: { article: any }) {
               src={article.featuredImage.url}
               alt={article.featuredImage.alt || article.title}
               fill
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
