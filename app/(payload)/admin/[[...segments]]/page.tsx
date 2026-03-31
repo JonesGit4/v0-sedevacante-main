@@ -20,32 +20,7 @@ type Args = {
 export const generateMetadata = ({ params, searchParams }: Args): Promise<Metadata> =>
   generatePageMetadata({ config, params, searchParams })
 
-const Page = async ({ params, searchParams }: Args) => {
-  try {
-    const result = await RootPage({ config, params, searchParams, importMap })
-    return result
-  } catch (error: any) {
-    // Re-throw Next.js internal errors (redirect, notFound)
-    if (
-      error?.digest?.startsWith("NEXT_REDIRECT") ||
-      error?.digest?.startsWith("NEXT_NOT_FOUND") ||
-      error?.message === "NEXT_REDIRECT" ||
-      error?.message === "NEXT_NOT_FOUND"
-    ) {
-      throw error
-    }
-    console.error("[PAYLOAD ADMIN ERROR]", error?.message, error?.stack)
-    return (
-      <div style={{ padding: 40, fontFamily: "monospace" }}>
-        <h1 style={{ color: "red" }}>Admin Render Error</h1>
-        <pre style={{ whiteSpace: "pre-wrap", background: "#f5f5f5", padding: 20, borderRadius: 8 }}>
-          {error?.message || "Unknown error"}
-          {"\n\n"}
-          {error?.stack || "No stack trace"}
-        </pre>
-      </div>
-    )
-  }
-}
+const Page = ({ params, searchParams }: Args) =>
+  RootPage({ config, params, searchParams, importMap })
 
 export default Page
