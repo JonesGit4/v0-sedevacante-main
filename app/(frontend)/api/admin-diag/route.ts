@@ -6,106 +6,113 @@ export const maxDuration = 60
 
 export async function GET(req: Request) {
   const url = new URL(req.url)
-  const test = url.searchParams.get("test") || "all"
-  const results: any = { tests: [] }
+  const action = url.searchParams.get("action") || "check"
+  const results: any = { action, tests: [] }
 
   try {
     const payload = await getPayload({ config })
-    results.tests.push({ name: "payload-init", status: "ok" })
 
-    // Check all tables and their columns
-    try {
-      const db = payload.db as any
-      if (db.drizzle) {
-        // Check payload_locked_documents_rels schema
-        const lockedRels = await db.drizzle.execute(
-          `SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'payload_locked_documents_rels' ORDER BY ordinal_position`
-        )
-        results.tests.push({
-          name: "locked-docs-rels-schema",
-          status: "ok",
-          columns: lockedRels.rows || lockedRels,
-        })
-
-        // Check payload_migrations
-        const migrations = await db.drizzle.execute(
-          `SELECT * FROM payload_migrations ORDER BY created_at DESC LIMIT 5`
-        )
-        results.tests.push({
-          name: "migrations",
-          status: "ok",
-          data: migrations.rows || migrations,
-        })
-
-        // Check payload_preferences - these can affect admin rendering
-        const prefs = await db.drizzle.execute(
-          `SELECT * FROM payload_preferences LIMIT 5`
-        )
-        results.tests.push({
-          name: "preferences",
-          status: "ok",
-          count: (prefs.rows || prefs).length,
-          data: prefs.rows || prefs,
-        })
-
-        // Check payload_kv
-        const kv = await db.drizzle.execute(
-          `SELECT * FROM payload_kv LIMIT 5`
-        )
-        results.tests.push({
-          name: "kv",
-          status: "ok",
-          count: (kv.rows || kv).length,
-          data: kv.rows || kv,
-        })
-
-        // Check if there are any articles_rels or similar tables
-        const allTables = await db.drizzle.execute(
-          `SELECT table_name, (SELECT count(*) FROM information_schema.columns c WHERE c.table_name = t.table_name) as col_count FROM information_schema.tables t WHERE table_schema = 'public' ORDER BY table_name`
-        )
-        results.tests.push({
-          name: "all-tables",
-          status: "ok",
-          tables: (allTables.rows || allTables).map((r: any) => ({ name: r.table_name, cols: r.col_count })),
-        })
-
-        // Check what Drizzle schema knows about
-        const schemaKeys = Object.keys(db.drizzle?._.schema || {}).sort()
-        results.tests.push({
-          name: "drizzle-schema-keys",
-          status: "ok",
-          keys: schemaKeys,
-        })
-      }
-    } catch (e: any) {
-      results.tests.push({ name: "deep-schema-check", status: "error", error: e.message, stack: e.stack?.slice(0, 500) })
+    const db = payload.db as any
+    if (!db.drizzle) {
+      return NextResponse.json({ error: "No drizzle instance" }, { status: 500 })
     }
 
-    // Try to call the admin init handler
-    try {
-      const collections = payload.collections
-      const collSlugs = Object.keys(collections)
+    if (action === "check") {
+      // Check if banners_id column exists in payload_locked_documents_rels
+      const cols = await db.drizzle.execute(
+        `SELECT column_name FROM information_schema.columns WHERE table_name = 'payload_locked_documents_rels' ORDER BY ordinal_position`
+      )
+      const colNames = (cols.rows || cols).map((r: any) => r.column_name)
       results.tests.push({
-        name: "payload-collections",
-        status: "ok",
-        slugs: collSlugs,
+        name: "locked-rels-columns",
+        columns: colNames,
+        hasBannersId: colNames.includes("banners_id"),
       })
 
-      // Check config.admin
-      const adminConfig = payload.config?.admin
+      // Also check banners_rels
+      const bCols = await db.drizzle.execute(
+        `SELECT column_name FROM information_schema.columns WHERE table_name = 'banners_rels' ORDER BY ordinal_position`
+      )
       results.tests.push({
-        name: "admin-config",
-        status: "ok",
-        user: adminConfig?.user,
-        hasImportMap: !!adminConfig?.importMap,
-        hasMeta: !!adminConfig?.meta,
+        name: "banners-rels-columns",
+        columns: (bCols.rows || bCols).map((r: any) => r.column_name),
       })
-    } catch (e: any) {
-      results.tests.push({ name: "admin-check", status: "error", error: e.message })
+
+      // Check payload_preferences_rels
+      const pCols = await db.drizzle.execute(
+        `SELECT column_name FROM information_schema.columns WHERE table_name = 'payload_preferences_rels' ORDER BY ordinal_position`
+      )
+      results.tests.push({
+        name: "preferences-rels-columns",
+        columns: (pCols.rows || pCols).map((r: any) => r.column_name),
+      })
+    }
+
+    if (action === "fix") {
+      const fixResults: string[] = []
+
+      // Add banners_id to payload_locked_documents_rels if missing
+      try {
+        const check1 = await db.drizzle.execute(
+          `SELECT column_name FROM information_schema.columns WHERE table_name = 'payload_locked_documents_rels' AND column_name = 'banners_id'`
+        )
+        if ((check1.rows || check1).length === 0) {
+          await db.drizzle.execute(
+            `ALTER TABLE payload_locked_documents_rels ADD COLUMN banners_id integer`
+          )
+          fixResults.push("Added banners_id to payload_locked_documents_rels")
+
+          // Add index
+          await db.drizzle.execute(
+            `CREATE INDEX IF NOT EXISTS payload_locked_documents_rels_banners_idx ON payload_locked_documents_rels (banners_id)`
+          )
+          fixResults.push("Created index for banners_id")
+
+          // Add foreign key
+          await db.drizzle.execute(
+            `ALTER TABLE payload_locked_documents_rels ADD CONSTRAINT payload_locked_documents_rels_banners_fk FOREIGN KEY (banners_id) REFERENCES banners(id) ON DELETE CASCADE`
+          )
+          fixResults.push("Added foreign key constraint for banners_id")
+        } else {
+          fixResults.push("banners_id already exists in payload_locked_documents_rels")
+        }
+      } catch (e: any) {
+        fixResults.push(`Error (locked_rels): ${e.message}`)
+      }
+
+      // Add banners_id to payload_preferences_rels if missing
+      try {
+        const check2 = await db.drizzle.execute(
+          `SELECT column_name FROM information_schema.columns WHERE table_name = 'payload_preferences_rels' AND column_name = 'banners_id'`
+        )
+        if ((check2.rows || check2).length === 0) {
+          await db.drizzle.execute(
+            `ALTER TABLE payload_preferences_rels ADD COLUMN banners_id integer`
+          )
+          fixResults.push("Added banners_id to payload_preferences_rels")
+
+          await db.drizzle.execute(
+            `CREATE INDEX IF NOT EXISTS payload_preferences_rels_banners_idx ON payload_preferences_rels (banners_id)`
+          )
+          fixResults.push("Created index for banners_id in preferences_rels")
+
+          await db.drizzle.execute(
+            `ALTER TABLE payload_preferences_rels ADD CONSTRAINT payload_preferences_rels_banners_fk FOREIGN KEY (banners_id) REFERENCES banners(id) ON DELETE CASCADE`
+          )
+          fixResults.push("Added foreign key constraint for banners_id in preferences_rels")
+        } else {
+          fixResults.push("banners_id already exists in payload_preferences_rels")
+        }
+      } catch (e: any) {
+        fixResults.push(`Error (preferences_rels): ${e.message}`)
+      }
+
+      results.fixes = fixResults
     }
 
   } catch (e: any) {
-    results.tests.push({ name: "payload-init", status: "error", error: e.message, stack: e.stack?.slice(0, 500) })
+    results.error = e.message
+    results.stack = e.stack?.slice(0, 500)
   }
 
   return NextResponse.json(results, { status: 200 })
