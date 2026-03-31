@@ -14,6 +14,7 @@ import { Articles } from "./collections/Articles"
 import { News } from "./collections/News"
 import { Media } from "./collections/Media"
 import { Users } from "./collections/Users"
+import { Banners } from "./collections/Banners"
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -32,7 +33,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Articles, News, Media],
+  collections: [Users, Articles, News, Media, Banners],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "sdv-payload-secret-2026-sssj-sede-vac",
   db: postgresAdapter({
