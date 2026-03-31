@@ -63,7 +63,7 @@ export function SiteNavbar() {
         scrolled
           ? isHome
             ? "bg-black/90 backdrop-blur-md shadow-lg py-3"
-            : "bg-[#5C0A1A] backdrop-blur-md shadow-lg py-3"
+            : "bg-[#5C0A1A]/90 backdrop-blur-md shadow-lg py-3"
           : isHome
             ? "bg-transparent py-5"
             : "bg-[#5C0A1A] py-5"
