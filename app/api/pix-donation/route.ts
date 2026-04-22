@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 
 const OPENPIX_API = "https://api.openpix.com.br/api/v1/charge"
-const OPENPIX_KEY = "Q2xpZW50X0lkXzU3ZmVkNmYyLTkwOGYtNDliZi1hODgyLTY5YzcyNmJhMjUzMTpDbGllbnRfU2VjcmV0X0xyVXJvRkF2WlN0b0NPbnkyYUhDRUxIL0lzckZPZTlOczQxbmZ6cEd5eGs9"
+const OPENPIX_KEY = "Q2xpZW50X0lkXzUwZGI5YzlmLTZmMjYtNGUxYi04MzFkLTc4ZThiYTIxZDMwMTpDbGllbnRfU2VjcmV0X1MwSitiZzBjTkpqN0ZzZ3o1ZXJ5N0tKLzdFQWJEYnlpUzR0dnZQNEwwNTQ9"
 
 export async function POST(req: NextRequest) {
   try {

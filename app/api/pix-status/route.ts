@@ -5,8 +5,8 @@ const OPENPIX_API = "https://api.openpix.com.br/api/v1/charge"
 // Livro SDV Crise — used for book purchase charges (correlationID starts with "order-")
 const OPENPIX_KEY_CHARGE = "Q2xpZW50X0lkX2Q3MzEzNzRjLWI4MTItNGI5Mi04MzM1LTRhM2FlMzZlN2FjYjpDbGllbnRfU2VjcmV0X24zN3VQZmplVUl0eXlheG1pNVI2dTJ2QmlZOGhHZkMvQmtKVGwwRGpHWXc9"
 
-// Plugin SSSJ Livro — used for donations (correlationID starts with "donation-")
-const OPENPIX_KEY_DONATION = "Q2xpZW50X0lkXzU3ZmVkNmYyLTkwOGYtNDliZi1hODgyLTY5YzcyNmJhMjUzMTpDbGllbnRfU2VjcmV0X0xyVXJvRkF2WlN0b0NPbnkyYUhDRUxIL0lzckZPZTlOczQxbmZ6cEd5eGs9"
+// SeminarioSSJ — used for donations (correlationID starts with "donation-")
+const OPENPIX_KEY_DONATION = "Q2xpZW50X0lkXzUwZGI5YzlmLTZmMjYtNGUxYi04MzFkLTc4ZThiYTIxZDMwMTpDbGllbnRfU2VjcmV0X1MwSitiZzBjTkpqN0ZzZ3o1ZXJ5N0tKLzdFQWJEYnlpUzR0dnZQNEwwNTQ9"
 
 export async function GET(req: NextRequest) {
   try {
