@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server"
 
 const OPENPIX_API = "https://api.openpix.com.br/api/v1/charge"
-const OPENPIX_KEY = "Q2xpZW50X0lkXzU3ZmVkNmYyLTkwOGYtNDliZi1hODgyLTY5YzcyNmJhMjUzMTpDbGllbnRfU2VjcmV0X2pSZmR6LzFUUFJRazFScGJHWW55V1VTclpMd0Z6U293VjZUdCtndXcyc2c9"
+
+// Livro SDV Crise — used for book purchase charges (correlationID starts with "order-")
+const OPENPIX_KEY_CHARGE = "Q2xpZW50X0lkX2Q3MzEzNzRjLWI4MTItNGI5Mi04MzM1LTRhM2FlMzZlN2FjYjpDbGllbnRfU2VjcmV0X24zN3VQZmplVUl0eXlheG1pNVI2dTJ2QmlZOGhHZkMvQmtKVGwwRGpHWXc9"
+
+// Plugin SSSJ Livro — used for donations (correlationID starts with "donation-")
+const OPENPIX_KEY_DONATION = "Q2xpZW50X0lkXzU3ZmVkNmYyLTkwOGYtNDliZi1hODgyLTY5YzcyNmJhMjUzMTpDbGllbnRfU2VjcmV0X0xyVXJvRkF2WlN0b0NPbnkyYUhDRUxIL0lzckZPZTlOczQxbmZ6cEd5eGs9"
 
 export async function GET(req: NextRequest) {
   try {
@@ -12,10 +17,13 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "ID obrigatório" }, { status: 400 })
     }
 
+    // Select key based on correlationID prefix
+    const key = id.startsWith("order-") ? OPENPIX_KEY_CHARGE : OPENPIX_KEY_DONATION
+
     const res = await fetch(`${OPENPIX_API}/${id}`, {
       method: "GET",
       headers: {
-        Authorization: OPENPIX_KEY,
+        Authorization: key,
         "Content-Type": "application/json",
       },
     })
