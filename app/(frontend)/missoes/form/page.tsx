@@ -57,8 +57,43 @@ export default function MissionFormPage() {
     resolver: zodResolver(missionSchema),
   })
 
+  // ─── Compress image before upload ────────────────────
+  async function compressImage(file: File): Promise<File> {
+    return new Promise((resolve) => {
+      // Skip if already small (< 300KB)
+      if (file.size < 300 * 1024) {
+        resolve(file)
+        return
+      }
+      const img = new Image()
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        const MAX = 1200
+        let { width, height } = img
+        if (width > MAX || height > MAX) {
+          const ratio = Math.min(MAX / width, MAX / height)
+          width = Math.round(width * ratio)
+          height = Math.round(height * ratio)
+        }
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')!
+        ctx.drawImage(img, 0, 0, width, height)
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) { resolve(file); return }
+            resolve(new File([blob], file.name, { type: 'image/jpeg' }))
+          },
+          'image/jpeg',
+          0.7
+        )
+      }
+      img.src = URL.createObjectURL(file)
+    })
+  }
+
   // ─── Handle photo selection ──────────────────────────
-  function handlePhotos(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handlePhotos(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files || [])
     const total = [...photos, ...files]
     if (total.length > 10) {
@@ -66,8 +101,11 @@ export default function MissionFormPage() {
       return
     }
     setError('')
-    setPhotos(total)
-    setPhotoPreviews(total.map(f => URL.createObjectURL(f)))
+    // Compress all new files
+    const compressed = await Promise.all(files.map(compressImage))
+    const newPhotos = [...photos, ...compressed]
+    setPhotos(newPhotos)
+    setPhotoPreviews(newPhotos.map(f => URL.createObjectURL(f)))
   }
 
   function removePhoto(index: number) {
