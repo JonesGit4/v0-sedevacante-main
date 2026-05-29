@@ -279,7 +279,7 @@ export default function MissionFormPage() {
                 <input {...register('dias_missas')} type="url" placeholder="https://..." className={inputClass} />
               </InputField>
               <InputField label="Dias e horários de Confissão" error={errors.dias_confissao?.message}>
-                <input {...register('dias_confissao')} placeholder="Ex: Sábado 14h-16h ou 30min antes de cada Missa" className={inputClass} />
+                <input {...register('dias_confissao')} placeholder="Ex: sexta-feira, 08:00–18:00 / domingo, Fechado" className={inputClass} />
               </InputField>
               <InputField label="Capacidade de fiéis" hint="Número aproximado de lugares" error={errors.capacidade?.message}>
                 <input {...register('capacidade')} type="number" min={0} className={inputClass} />
