@@ -281,7 +281,7 @@ export default function MissionFormPage() {
           {/* ── Seção 3: Horários ── */}
           <fieldset>
             <legend className="font-display text-lg text-[#83071B] mb-4 pb-2 border-b border-stone-200 w-full">
-              Horários e Capacidade
+              Horários e Detalhes
             </legend>
             <div className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
