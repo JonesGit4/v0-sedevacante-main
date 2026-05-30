@@ -27,6 +27,7 @@ const missionSchema = z.object({
   horario_missa_2: z.string().optional(),
   horario_missa_3: z.string().optional(),
   dias_confissao: z.string().url('Cole um link válido').optional().or(z.literal('')),
+  horario_confissao: z.string().optional(),
   capacidade: z.coerce.number().int().positive().optional().or(z.literal(0)),
   telefone: z.string().optional(),
   whatsapp: z.string().optional(),
@@ -306,6 +307,9 @@ export default function MissionFormPage() {
               </div>
               <InputField label="Link do Google Calendar (Confissões)" hint="Cole aqui se tiver calendário online" error={errors.dias_confissao?.message}>
                 <input {...register('dias_confissao')} type="url" placeholder="https://calendar.google.com/calendar/embed?..." className={inputClass} />
+              </InputField>
+              <InputField label="Horário de Confissões" hint="Ex: Sexta-feira, 08:00–12:00 / Sábado, 14:00–18:00" error={errors.horario_confissao?.message}>
+                <input {...register('horario_confissao')} placeholder="Ex: Sexta-feira, 08:00–12:00" className={inputClass} />
               </InputField>
               <InputField label="Capacidade de fiéis" hint="Número aproximado de lugares" error={errors.capacidade?.message}>
                 <input {...register('capacidade')} type="number" min={0} className={inputClass} />

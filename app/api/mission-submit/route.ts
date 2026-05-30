@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
       horario_missa_2: body.horario_missa_2 || null,
       horario_missa_3: body.horario_missa_3 || null,
       dias_confissao: body.dias_confissao || null,
+      horario_confissao: body.horario_confissao || null,
       capacidade: body.capacidade ? parseInt(String(body.capacidade), 10) : null,
       telefone: body.telefone || null,
       whatsapp: body.whatsapp || null,
