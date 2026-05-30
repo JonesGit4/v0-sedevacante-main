@@ -304,8 +304,8 @@ export default function MissionFormPage() {
                   <input {...register('horario_missa_3')} placeholder="Ex: 17:00" className={inputClass} />
                 </InputField>
               </div>
-              <InputField label="Dias e horários de Confissão" hint="Cole o link do Google Calendar (se houver)" error={errors.dias_confissao?.message}>
-                <input {...register('dias_confissao')} type="url" placeholder="https://calendar.google.com/..." className={inputClass} />
+              <InputField label="Link do Google Calendar (Confissões)" hint="Cole aqui se tiver calendário online" error={errors.dias_confissao?.message}>
+                <input {...register('dias_confissao')} type="url" placeholder="https://calendar.google.com/calendar/embed?..." className={inputClass} />
               </InputField>
               <InputField label="Capacidade de fiéis" hint="Número aproximado de lugares" error={errors.capacidade?.message}>
                 <input {...register('capacidade')} type="number" min={0} className={inputClass} />
