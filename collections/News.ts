@@ -26,29 +26,6 @@ export const News: CollectionConfig = {
   },
   fields: [
     {
-      name: "slug",
-      type: "text",
-      required: true,
-      unique: true,
-      label: "Slug",
-      admin: { position: "sidebar" },
-      hooks: {
-        beforeValidate: [
-          ({ data }) => {
-            if (data?.title && !data?.slug) {
-              data.slug = data.title
-                .toLowerCase()
-                .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-                .replace(/[^a-z0-9]+/g, "-")
-                .replace(/^-+|-+$/g, "")
-                .substring(0, 80)
-            }
-            return data
-          },
-        ],
-      },
-    },
-    {
       name: "title",
       type: "text",
       required: true,
@@ -73,14 +50,6 @@ export const News: CollectionConfig = {
       required: true,
       label: "Descrição",
       maxLength: 500,
-    },
-    {
-      name: "content",
-      type: "richText",
-      label: "Conteúdo",
-      admin: {
-        description: "Corpo completo da notícia.",
-      },
     },
     {
       name: "image",
