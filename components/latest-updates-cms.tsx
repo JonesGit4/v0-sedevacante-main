@@ -3,6 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
+import Link from "next/link"
 import { useLanguage } from "@/lib/language-context"
 import { useState, useEffect, useCallback } from "react"
 
@@ -14,6 +15,7 @@ interface GalleryPhoto {
 interface NewsItem {
   id: string
   title: string
+  slug: string
   description: string
   label: string
   date: string
@@ -186,9 +188,11 @@ export function LatestUpdatesCMS({ news }: { news: NewsItem[] }) {
                     >
                       {labelMap[item.label] || item.label}
                     </Badge>
-                    <h3 className="text-xl font-sans font-semibold text-foreground mb-3 text-balance">
-                      {item.title}
-                    </h3>
+                    <Link href={`/news/${item.slug}`} className="hover:text-primary transition-colors">
+                      <h3 className="text-xl font-sans font-semibold text-foreground mb-3 text-balance">
+                        {item.title}
+                      </h3>
+                    </Link>
                     <p className="text-muted-foreground font-serif text-sm leading-relaxed mb-4 flex-grow">
                       {item.description}
                     </p>
@@ -237,9 +241,11 @@ export function LatestUpdatesCMS({ news }: { news: NewsItem[] }) {
                       >
                         {labelMap[item.label] || item.label}
                       </Badge>
-                      <h3 className="text-xl font-sans font-semibold text-foreground mb-3 text-balance">
-                        {item.title}
-                      </h3>
+                      <Link href={`/news/${item.slug}`} className="hover:text-primary transition-colors">
+                        <h3 className="text-xl font-sans font-semibold text-foreground mb-3 text-balance">
+                          {item.title}
+                        </h3>
+                      </Link>
                       <p className="text-muted-foreground font-serif text-sm leading-relaxed mb-4">
                         {item.description}
                       </p>
