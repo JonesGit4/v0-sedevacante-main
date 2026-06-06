@@ -14,12 +14,16 @@ async function getNewsBySlug(slug: string) {
     where: { status: { equals: "published" } },
     limit: 200,
   })
-  // Debug: return first doc info
-  const found = result.docs.find((doc: any) => doc.slug === slug)
-  if (!found) {
-    // Log what we got for debugging
-    const slugs = result.docs.map((d: any) => d.slug).slice(0, 5)
-    console.error(`getNewsBySlug("${slug}"): searched ${result.docs.length} docs, first slugs: ${JSON.stringify(slugs)}`)
+  // Normalize both sides to handle Unicode NFC/NFD differences
+  const normalized = slug.normalize("NFC")
+  const found = result.docs.find((doc: any) => {
+    const docSlug = (doc.slug || "").normalize("NFC")
+    return docSlug === normalized
+  })
+  if (!found && result.docs.length > 0) {
+    // Sample first 3 slugs for debugging
+    const sample = result.docs.slice(0, 3).map((d: any) => d.slug)
+    throw new Error(`Slug "${slug}" not found among ${result.docs.length} docs. Samples: ${JSON.stringify(sample)}`)
   }
   return found || null
 }
