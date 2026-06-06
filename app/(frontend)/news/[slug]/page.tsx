@@ -4,11 +4,16 @@ import Image from "next/image"
 import CorrectionButton from "@/components/correction-button"
 
 async function getNewsBySlug(slug: string) {
-  // Always use production domain — VERCEL_URL points to preview without DB
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://sedevacante.com.br"
-  const apiUrl = `${base}/api/news?where[slug][equals]=${encodeURIComponent(slug)}&depth=1`
+  // Vercel system env always available, falls back to production domain
+  const base = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : process.env.NEXT_PUBLIC_SITE_URL || "https://sedevacante.com.br"
+  
+  const url = new URL("/api/news", base)
+  url.searchParams.set("where[slug][equals]", slug)
+  url.searchParams.set("depth", "1")
 
-  const res = await fetch(apiUrl, { next: { revalidate: 60 } })
+  const res = await fetch(url.toString(), { next: { revalidate: 60 } })
   if (!res.ok) return null
   const data = await res.json()
   return data.docs?.[0] || null
