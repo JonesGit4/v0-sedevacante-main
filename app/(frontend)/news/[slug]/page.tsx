@@ -4,28 +4,28 @@ import Image from "next/image"
 import { getPayload } from "payload"
 import config from "@payload-config"
 import CorrectionButton from "@/components/correction-button"
+import { cache } from "react"
 
 export const dynamic = "force-dynamic"
 
-async function getNewsBySlug(slug: string) {
+// Deduplicate getPayload call — called by both generateMetadata and page render
+const getPublishedNews = cache(async () => {
   const payload = await getPayload({ config })
   const result = await payload.find({
     collection: "news",
     where: { status: { equals: "published" } },
     limit: 200,
   })
-  // Normalize both sides to handle Unicode NFC/NFD differences
+  return result.docs
+})
+
+async function getNewsBySlug(slug: string) {
+  const docs = await getPublishedNews()
   const normalized = slug.normalize("NFC")
-  const found = result.docs.find((doc: any) => {
+  return docs.find((doc: any) => {
     const docSlug = (doc.slug || "").normalize("NFC")
     return docSlug === normalized
-  })
-  if (!found && result.docs.length > 0) {
-    // Sample first 3 slugs for debugging
-    const sample = result.docs.slice(0, 3).map((d: any) => d.slug)
-    throw new Error(`Slug "${slug}" not found among ${result.docs.length} docs. Samples: ${JSON.stringify(sample)}`)
-  }
-  return found || null
+  }) || null
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
