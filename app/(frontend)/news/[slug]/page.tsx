@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
+import CorrectionButton from "@/components/correction-button"
 
 async function getNewsBySlug(slug: string) {
   const apiUrl = process.env.NEXT_PUBLIC_SITE_URL
@@ -152,6 +153,9 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
           )}
         </div>
       )}
+
+      {/* Correction button */}
+      <CorrectionButton slug={slug} titulo={news.title} />
 
       {/* Back link */}
       <div className="mt-12 pt-6 border-t border-border">
