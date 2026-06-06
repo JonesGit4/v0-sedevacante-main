@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 
 const TELEGRAM_BOT = process.env.TELEGRAM_CORRECTION_BOT || "8964082782:AAHw-jXGw8dyBOtmQRPV_oMKORYrXZLrqrk"
 const TELEGRAM_CHAT = process.env.TELEGRAM_CORRECTION_CHAT || "-1003950380440"
-// message_thread_id será preenchido quando Jones criar o tópico
-const TELEGRAM_THREAD = process.env.TELEGRAM_CORRECTION_THREAD || ""
+// message_thread_id do tópico "Pedido Correção" no RSS_Revisado
+const TELEGRAM_THREAD = process.env.TELEGRAM_CORRECTION_THREAD || "121"
 
 export async function POST(req: NextRequest) {
   try {
