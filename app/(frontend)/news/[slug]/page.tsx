@@ -8,13 +8,14 @@ import CorrectionButton from "@/components/correction-button"
 async function getNewsBySlug(slug: string) {
   try {
     const payload = await getPayload({ config })
+    // Payload CMS bug: where queries with non-ASCII slugs fail via getPayload
+    // Workaround: fetch published and filter in memory
     const result = await payload.find({
       collection: "news",
-      where: { slug: { equals: slug } },
-      depth: 1,
-      limit: 1,
+      where: { status: { equals: "published" } },
+      limit: 200,
     })
-    return result.docs[0] || null
+    return result.docs.find((doc: any) => doc.slug === slug) || null
   } catch (e) {
     console.error("Error fetching news by slug:", e)
     return null
