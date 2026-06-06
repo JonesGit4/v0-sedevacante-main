@@ -99,12 +99,53 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
           {Array.isArray(news.content) ? (
             news.content.map((node: any, i: number) => {
               if (!node.children) return null
-              const text = node.children.map((c: any) => c.text || "").join("")
-              if (!text.trim()) return <br key={i} />
-              if (node.type === "h2") return <h2 key={i} className="text-2xl font-sans font-semibold mt-8 mb-4">{text}</h2>
-              if (node.type === "h3") return <h3 key={i} className="text-xl font-sans font-semibold mt-6 mb-3">{text}</h3>
-              if (node.type === "blockquote") return <blockquote key={i} className="border-l-4 border-primary/40 pl-4 italic my-4">{text}</blockquote>
-              return <p key={i} className="mb-4">{text}</p>
+              
+              // Check if this is the source footer
+              const fullText = node.children.map((c: any) => c.text || "").join("")
+              const isSourceFooter = fullText.includes("📎") && fullText.includes("Fonte original")
+              
+              if (!fullText.trim()) return <br key={i} />
+              
+              if (node.type === "h2") return <h2 key={i} className="text-2xl font-sans font-semibold mt-8 mb-4">{fullText}</h2>
+              if (node.type === "h3") return <h3 key={i} className="text-xl font-sans font-semibold mt-6 mb-3">{fullText}</h3>
+              if (node.type === "blockquote") return <blockquote key={i} className="border-l-4 border-primary/40 pl-4 italic my-4">{fullText}</blockquote>
+              
+              // Source footer with link
+              if (isSourceFooter) {
+                // Extract link from child with 'link' attribute
+                const linkChild = node.children.find((c: any) => c.link)
+                const sourceUrl = linkChild?.link || "#"
+                const sourceName = fullText.replace("📎 Fonte original: ", "").trim()
+                
+                return (
+                  <div key={i} className="mt-8 pt-4 border-t border-border text-sm text-muted-foreground font-serif">
+                    <p>
+                      <span className="mr-1">📎</span>
+                      <strong>Fonte original:</strong>{" "}
+                      <a 
+                        href={sourceUrl}
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline"
+                      >
+                        {sourceName}
+                      </a>
+                    </p>
+                  </div>
+                )
+              }
+              
+              // Regular paragraph with formatting
+              return (
+                <p key={i} className="mb-4">
+                  {node.children.map((child: any, j: number) => {
+                    if (child.bold) return <strong key={j}>{child.text}</strong>
+                    if (child.italic) return <em key={j}>{child.text}</em>
+                    if (child.code) return <code key={j} className="bg-muted px-1 rounded text-sm">{child.text}</code>
+                    return <span key={j}>{child.text}</span>
+                  })}
+                </p>
+              )
             })
           ) : (
             <p className="mb-4">{String(news.content)}</p>
