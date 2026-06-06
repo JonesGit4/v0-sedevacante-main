@@ -12,10 +12,12 @@ type Props = {
 }
 
 async function getNewsBySlug(slug: string) {
+  // Strip accents to match database (Payload strips them natively)
+  const asciiSlug = slug.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
   const payload = await getPayload({ config })
   const result = await payload.find({
     collection: "news",
-    where: { slug: { equals: slug }, status: { equals: "published" } },
+    where: { slug: { equals: asciiSlug }, status: { equals: "published" } },
     limit: 1,
   })
   return result.docs[0] || null
