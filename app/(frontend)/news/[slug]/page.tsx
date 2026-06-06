@@ -8,20 +8,20 @@ import CorrectionButton from "@/components/correction-button"
 export const dynamic = "force-dynamic"
 
 async function getNewsBySlug(slug: string) {
-  try {
-    const payload = await getPayload({ config })
-    // Payload CMS bug: where queries with non-ASCII slugs fail via getPayload
-    // Workaround: fetch published and filter in memory
-    const result = await payload.find({
-      collection: "news",
-      where: { status: { equals: "published" } },
-      limit: 200,
-    })
-    return result.docs.find((doc: any) => doc.slug === slug) || null
-  } catch (e) {
-    console.error("Error fetching news by slug:", e)
-    return null
+  const payload = await getPayload({ config })
+  const result = await payload.find({
+    collection: "news",
+    where: { status: { equals: "published" } },
+    limit: 200,
+  })
+  // Debug: return first doc info
+  const found = result.docs.find((doc: any) => doc.slug === slug)
+  if (!found) {
+    // Log what we got for debugging
+    const slugs = result.docs.map((d: any) => d.slug).slice(0, 5)
+    console.error(`getNewsBySlug("${slug}"): searched ${result.docs.length} docs, first slugs: ${JSON.stringify(slugs)}`)
   }
+  return found || null
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
