@@ -1,31 +1,16 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
-import { getPayload } from "payload"
-import config from "@payload-config"
 import CorrectionButton from "@/components/correction-button"
-import { cache } from "react"
 
 export const dynamic = "force-dynamic"
 
-// Deduplicate getPayload call — called by both generateMetadata and page render
-const getPublishedNews = cache(async () => {
-  const payload = await getPayload({ config })
-  const result = await payload.find({
-    collection: "news",
-    where: { status: { equals: "published" } },
-    limit: 200,
-  })
-  return result.docs
-})
-
 async function getNewsBySlug(slug: string) {
-  const docs = await getPublishedNews()
-  const normalized = slug.normalize("NFC")
-  return docs.find((doc: any) => {
-    const docSlug = (doc.slug || "").normalize("NFC")
-    return docSlug === normalized
-  }) || null
+  const url = `https://sedevacante.com.br/api/news?where[slug][equals]=${encodeURIComponent(slug)}&depth=1`
+  const res = await fetch(url, { next: { revalidate: 60 } })
+  if (!res.ok) return null
+  const data = await res.json()
+  return data.docs?.[0] || null
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
