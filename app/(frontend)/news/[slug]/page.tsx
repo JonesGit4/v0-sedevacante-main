@@ -5,6 +5,8 @@ import { getPayload } from "payload"
 import config from "@payload-config"
 import CorrectionButton from "@/components/correction-button"
 
+export const dynamic = "force-dynamic"
+
 async function getNewsBySlug(slug: string) {
   try {
     const payload = await getPayload({ config })
