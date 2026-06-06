@@ -4,9 +4,10 @@ import Image from "next/image"
 import CorrectionButton from "@/components/correction-button"
 
 async function getNewsBySlug(slug: string) {
+  const encodedSlug = encodeURIComponent(slug)
   const apiUrl = process.env.NEXT_PUBLIC_SITE_URL
-    ? `${process.env.NEXT_PUBLIC_SITE_URL}/api/news?where[slug][equals]=${slug}&depth=1`
-    : `https://sedevacante.com.br/api/news?where[slug][equals]=${slug}&depth=1`
+    ? `${process.env.NEXT_PUBLIC_SITE_URL}/api/news?where[slug][equals]=${encodedSlug}&depth=1`
+    : `https://sedevacante.com.br/api/news?where[slug][equals]=${encodedSlug}&depth=1`
 
   const res = await fetch(apiUrl, { next: { revalidate: 60 } })
   if (!res.ok) return null
