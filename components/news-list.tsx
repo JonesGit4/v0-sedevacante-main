@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { useState, useEffect, useCallback } from "react"
 
@@ -12,6 +13,7 @@ interface GalleryPhoto {
 interface NewsItem {
   id: number
   title: string
+  slug?: string
   description: string
   label: string
   date: string
@@ -127,7 +129,15 @@ export function NewsList({ news }: { news: NewsItem[] }) {
                         <Badge className="w-fit mb-3 font-serif" variant={item.label === "highlight" || item.label === "featured" ? "default" : "secondary"}>
                           {labelMap[item.label] || item.label}
                         </Badge>
-                        <h3 className="text-2xl font-sans font-semibold text-foreground mb-2">{item.title}</h3>
+                        <h3 className="text-2xl font-sans font-semibold text-foreground mb-2">
+                          {item.slug ? (
+                            <Link href={`/news/${item.slug}`} className="hover:text-primary transition-colors">
+                              {item.title}
+                            </Link>
+                          ) : (
+                            item.title
+                          )}
+                        </h3>
                         <p className="text-muted-foreground font-serif leading-relaxed mb-4 line-clamp-3">{item.description}</p>
                       </div>
                       <span className="text-sm text-muted-foreground font-serif">{formatDate(item.date)}</span>
