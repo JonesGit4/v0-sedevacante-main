@@ -6,7 +6,11 @@ import CorrectionButton from "@/components/correction-button"
 export const dynamic = "force-dynamic"
 
 async function getNewsBySlug(slug: string) {
-  const url = `https://sedevacante.com.br/api/news?where[slug][equals]=${encodeURIComponent(slug)}&depth=1`
+  const params = new URLSearchParams({
+    "where[slug][equals]": slug,
+    "depth": "1"
+  })
+  const url = `https://sedevacante.com.br/api/news?${params.toString()}`
   const res = await fetch(url, { next: { revalidate: 60 } })
   if (!res.ok) return null
   const data = await res.json()
