@@ -1,22 +1,24 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
+import { getPayload } from "payload"
+import config from "@payload-config"
 import CorrectionButton from "@/components/correction-button"
 
 async function getNewsBySlug(slug: string) {
-  // Vercel system env always available, falls back to production domain
-  const base = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : process.env.NEXT_PUBLIC_SITE_URL || "https://sedevacante.com.br"
-  
-  const url = new URL("/api/news", base)
-  url.searchParams.set("where[slug][equals]", slug)
-  url.searchParams.set("depth", "1")
-
-  const res = await fetch(url.toString(), { next: { revalidate: 60 } })
-  if (!res.ok) return null
-  const data = await res.json()
-  return data.docs?.[0] || null
+  try {
+    const payload = await getPayload({ config })
+    const result = await payload.find({
+      collection: "news",
+      where: { slug: { equals: slug } },
+      depth: 1,
+      limit: 1,
+    })
+    return result.docs[0] || null
+  } catch (e) {
+    console.error("Error fetching news by slug:", e)
+    return null
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
