@@ -4,12 +4,10 @@ import Image from "next/image"
 import CorrectionButton from "@/components/correction-button"
 
 async function getNewsBySlug(slug: string) {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://sedevacante.com.br"
-  const url = new URL("/api/news", base)
-  url.searchParams.set("where[slug][equals]", slug)
-  url.searchParams.set("depth", "1")
+  // Use relative URL with manual encoding — URL/searchParams can fail in server components
+  const apiUrl = `/api/news?where[slug][equals]=${encodeURIComponent(slug)}&depth=1`
 
-  const res = await fetch(url.toString(), { next: { revalidate: 60 } })
+  const res = await fetch(apiUrl, { next: { revalidate: 60 } })
   if (!res.ok) return null
   const data = await res.json()
   return data.docs?.[0] || null
