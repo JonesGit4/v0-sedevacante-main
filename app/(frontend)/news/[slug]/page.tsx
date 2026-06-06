@@ -4,10 +4,8 @@ import Image from "next/image"
 import CorrectionButton from "@/components/correction-button"
 
 async function getNewsBySlug(slug: string) {
-  // Must use absolute URL — relative fetch fails with Payload CMS routes in server components
-  const base = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : process.env.NEXT_PUBLIC_SITE_URL || "https://sedevacante.com.br"
+  // Always use production domain — VERCEL_URL points to preview without DB
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://sedevacante.com.br"
   const apiUrl = `${base}/api/news?where[slug][equals]=${encodeURIComponent(slug)}&depth=1`
 
   const res = await fetch(apiUrl, { next: { revalidate: 60 } })
