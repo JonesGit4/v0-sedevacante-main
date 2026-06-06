@@ -4,8 +4,11 @@ import Image from "next/image"
 import CorrectionButton from "@/components/correction-button"
 
 async function getNewsBySlug(slug: string) {
-  // Use relative URL with manual encoding — URL/searchParams can fail in server components
-  const apiUrl = `/api/news?where[slug][equals]=${encodeURIComponent(slug)}&depth=1`
+  // Must use absolute URL — relative fetch fails with Payload CMS routes in server components
+  const base = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : process.env.NEXT_PUBLIC_SITE_URL || "https://sedevacante.com.br"
+  const apiUrl = `${base}/api/news?where[slug][equals]=${encodeURIComponent(slug)}&depth=1`
 
   const res = await fetch(apiUrl, { next: { revalidate: 60 } })
   if (!res.ok) return null
