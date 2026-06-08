@@ -3,7 +3,8 @@
 import { useState } from "react"
 
 export default function CorrectionButton({ slug, titulo }: { slug: string; titulo: string }) {
-  const [status, setStatus] = useState<"idle" | "loading" | "sent" | "error">("idle")
+  const [status, setStatus] = useState<"idle" | "loading" | "sent" | "error" | "limit">("idle")
+  const [errorMsg, setErrorMsg] = useState("")
 
   const handleClick = async () => {
     setStatus("loading")
@@ -13,8 +14,12 @@ export default function CorrectionButton({ slug, titulo }: { slug: string; titul
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ slug, titulo }),
       })
+      const data = await res.json()
       if (res.ok) {
         setStatus("sent")
+      } else if (res.status === 429) {
+        setStatus("limit")
+        setErrorMsg(data.error || "Limite de correções atingido.")
       } else {
         setStatus("error")
       }
@@ -27,6 +32,14 @@ export default function CorrectionButton({ slug, titulo }: { slug: string; titul
     return (
       <p className="text-sm text-muted-foreground font-serif italic">
         ✔ Pedido de correção enviado. Obrigado.
+      </p>
+    )
+  }
+
+  if (status === "limit") {
+    return (
+      <p className="text-sm text-amber-600 font-serif italic">
+        ⚠ {errorMsg}
       </p>
     )
   }
